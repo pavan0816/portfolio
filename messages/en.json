@@ -2,10 +2,11 @@
     "navigation": {
         "home": "Home",
         "about": "About",
+        "about-us": "About",
         "projects": "Projects",
+        "services": "Services",
+        "skills": "Services",
         "experience": "Experience",
-        "skills": "Skills",
-        "achievements": "Achievements",
         "blog": "Blog",
         "gallery": "Gallery",
         "contact": "Contact",
@@ -14,8 +15,8 @@
         "menu": {
             "achievements": "Achievements",
             "achievementsDesc": "Certifications, awards, and milestones",
-            "skills": "Skills",
-            "skillsDesc": "Technologies and tools I work with",
+            "skills": "Services",
+            "skillsDesc": "Explore our digital product development services",
             "experience": "Experience",
             "experienceDesc": "My professional journey and growth",
             "projects": "Projects",
@@ -35,8 +36,8 @@
         }
     },
     "hero": {
-        "greeting": "Welcome to my digital space",
-        "subtitle": "Full Stack Developer • AI Engineer • Data Scientist",
+        "greeting": "Welcome to InfusionX",
+        "subtitle": "Building Intelligent Digital Products That Drive Growth",
         "cta": {
             "primary": "Explore Projects",
             "secondary": "Get in Touch",
@@ -44,13 +45,13 @@
         },
         "badge": "Available for opportunities",
         "scroll": "Scroll Down",
-        "role": "Software Engineer",
-        "description": "Building intelligent systems at the intersection of <span class='text-primary font-semibold'>AI</span>, <span class='text-secondary font-semibold'>Engineering</span>, and <span class='text-accent font-semibold'>Scalable Architecture</span>."
+        "role": "Digital Agency",
+        "description": "InfusionX helps startups and enterprises transform ideas into scalable digital products."
     },
     "about": {
-        "title": "About Me",
-        "subtitle": "Tech Explorer & Problem Solver",
-        "description": "A passionate tech explorer specializing in Full Stack Development, Artificial Intelligence, and Data Science. Currently diving deep into AI Agents and Blockchain technology.",
+        "title": "About InfusionX",
+        "subtitle": "Building Intelligent Digital Products That Drive Growth",
+        "description": "InfusionX helps startups and enterprises transform ideas into scalable digital products. We specialize in websites, web applications, mobile apps, AI-powered solutions, business automation, cloud integration, and long-term product support.",
         "stats": {
             "experience": "Years Learning",
             "projects": "Projects Done",
@@ -70,9 +71,9 @@
             "scope": "Focusing on predictive models, optimized data processing, and RAG pipelines designed for production environments and measurable performance.",
             "bridging": "Bridging labs and live systems.",
             "integration": "Beyond models, I architect full-stack ecosystems: secure backends, robust data architectures, and scalable pipelines.",
-            "signature": "Azril",
-            "role": "AI, Data & Software Engineer",
-            "aboutMe": "About Me",
+            "signature": "InfusionX",
+            "role": "Digital Agency",
+            "aboutMe": "About Us",
             "scroll": "Scroll to Explore",
             "shortStory": "My Short Story"
         },

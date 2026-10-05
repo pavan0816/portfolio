@@ -30,7 +30,7 @@ export const HardSkills = () => {
       const cat = skill.category?.toLowerCase() || '';
       if (['ai'].includes(cat)) {
         groups['ai'].push(skill);
-      } else if (['software'].includes(cat)) {
+      } else if (['software', 'mobile'].includes(cat)) {
         groups['software'].push(skill);
       } else {
         groups['additional'].push(skill);
@@ -63,7 +63,7 @@ export const HardSkills = () => {
             transition={{ delay: 0.1 }}
             className="text-xs font-bold text-muted-foreground uppercase tracking-[0.4em] bg-muted/50 px-4 py-2 rounded-full"
           >
-            Capabilities & Architectures
+            Digital Solutions & Services
           </motion.span>
         </div>
 
@@ -75,15 +75,15 @@ export const HardSkills = () => {
             className="hidden md:flex w-full items-center bg-white dark:bg-[#111111] border border-black/5 dark:border-white/10 rounded-full mb-8 shadow-sm relative z-20 overflow-hidden"
         >
           <div className="flex-1 text-center py-4 font-bold text-sm cursor-default relative z-10 overflow-hidden transition-colors duration-700 text-foreground hover:text-white dark:hover:text-black before:content-[''] before:absolute before:inset-0 before:bg-black dark:before:bg-white before:-z-10 before:transition-transform before:duration-700 before:ease-in-out before:origin-left before:scale-x-0 hover:before:scale-x-100">
-            Applied AI
+            AI Solutions
           </div>
           <div className="w-px h-8 bg-black/10 dark:bg-white/10 shrink-0 relative z-20"></div>
           <div className="flex-1 text-center py-4 font-bold text-sm cursor-default relative z-10 overflow-hidden transition-colors duration-700 text-foreground hover:text-white dark:hover:text-black before:content-[''] before:absolute before:inset-0 before:bg-black dark:before:bg-white before:-z-10 before:transition-transform before:duration-700 before:ease-in-out before:origin-bottom before:scale-y-0 hover:before:scale-y-100">
-            Software Engineering
+            Digital Products
           </div>
           <div className="w-px h-8 bg-black/10 dark:bg-white/10 shrink-0 relative z-20"></div>
           <div className="flex-1 text-center py-4 font-bold text-sm cursor-default relative z-10 overflow-hidden transition-colors duration-700 text-foreground hover:text-white dark:hover:text-black before:content-[''] before:absolute before:inset-0 before:bg-black dark:before:bg-white before:-z-10 before:transition-transform before:duration-700 before:ease-in-out before:origin-right before:scale-x-0 hover:before:scale-x-100">
-            Additional Skills
+            Cloud & Strategy
           </div>
         </motion.div>
 

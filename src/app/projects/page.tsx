@@ -1341,8 +1341,6 @@ export default function ProjectsPage() {
                             </motion.div>
                         )
                     }
-                    {/* Contact Section */}
-                    <ProjectContact isLowPowerMode={isLowPowerMode} />
                 </div >
             </DeferredMount>
         </div >

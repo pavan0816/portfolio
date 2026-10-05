@@ -2,9 +2,11 @@
     "navigation": {
         "home": "Beranda",
         "about": "Tentang",
+        "about-us": "Tentang",
+        "services": "Layanan",
         "projects": "Proyek",
         "experience": "Pengalaman",
-        "skills": "Keahlian",
+        "skills": "Services",
         "achievements": "Pencapaian",
         "blog": "Blog",
         "gallery": "Galeri",
@@ -14,8 +16,8 @@
         "menu": {
             "achievements": "Pencapaian",
             "achievementsDesc": "Sertifikasi, penghargaan, dan pencapaian",
-            "skills": "Keahlian",
-            "skillsDesc": "Teknologi dan alat yang saya gunakan",
+            "skills": "Services",
+            "skillsDesc": "Explore our digital product development services",
             "experience": "Pengalaman",
             "experienceDesc": "Perjalanan profesional dan pertumbuhan saya",
             "projects": "Proyek",
@@ -35,8 +37,8 @@
         }
     },
     "hero": {
-        "greeting": "Selamat datang di ruang digital saya",
-        "subtitle": "Full Stack Developer • AI Engineer • Data Scientist",
+        "greeting": "Welcome to InfusionX",
+        "subtitle": "Building Intelligent Digital Products That Drive Growth",
         "cta": {
             "primary": "Jelajahi Proyek",
             "secondary": "Hubungi Saya",
@@ -44,13 +46,13 @@
         },
         "badge": "Terbuka untuk peluang",
         "scroll": "Gulir ke Bawah",
-        "role": "Software Engineer",
-        "description": "Membangun sistem cerdas di persimpangan <span class='text-primary font-semibold'>AI</span>, <span class='text-secondary font-semibold'>Rekayasa</span>, dan <span class='text-accent font-semibold'>Arsitektur Skalabel</span>."
+        "role": "Digital Agency",
+        "description": "InfusionX helps startups and enterprises transform ideas into scalable digital products."
     },
     "about": {
-        "title": "Tentang Saya",
-        "subtitle": "Tech Explorer & Problem Solver",
-        "description": "Seorang tech explorer yang bersemangat dengan spesialisasi dalam Full Stack Development, Artificial Intelligence, dan Data Science. Saat ini sedang mendalami AI Agents dan teknologi Blockchain.",
+        "title": "About InfusionX",
+        "subtitle": "Building Intelligent Digital Products That Drive Growth",
+        "description": "InfusionX helps startups and enterprises transform ideas into scalable digital products. We specialize in websites, web applications, mobile apps, AI-powered solutions, business automation, cloud integration, and long-term product support.",
         "stats": {
             "experience": "Tahun Belajar",
             "projects": "Proyek Selesai",
@@ -70,9 +72,9 @@
             "scope": "Berfokus pada model prediktif, pemrosesan data yang dioptimalkan, dan pipeline RAG yang dirancang untuk lingkungan produksi dan performa terukur.",
             "bridging": "Menghubungkan lab dan sistem langsung.",
             "integration": "Selain model, saya merancang ekosistem full-stack: backend yang aman, arsitektur data yang kuat, dan pipeline yang skalabel.",
-            "signature": "Azril",
-            "role": "AI, Data & Software Engineer",
-            "aboutMe": "Tentang Saya",
+            "signature": "InfusionX",
+            "role": "Digital Agency",
+            "aboutMe": "About Us",
             "scroll": "Scroll untuk Jelajah",
             "shortStory": "Cerita Singkat Saya"
         },

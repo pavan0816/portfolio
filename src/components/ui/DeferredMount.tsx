@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { usePreloadState } from '@/components/ui/arc-preloader-hero';
+import { usePreloadState } from '@/components/ui/premium-page-transition';
 
 interface DeferredMountProps {
     children: React.ReactNode;

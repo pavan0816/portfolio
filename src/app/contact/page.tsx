@@ -3,12 +3,12 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Send, CheckCircle, AlertCircle, Loader2, Disc, Music, ArrowUpRight, Sparkles, HelpCircle, MessageSquare, ExternalLink, Github, Linkedin, Twitter, Instagram, ChevronDown } from 'lucide-react';
+import { Send, CheckCircle, AlertCircle, Loader2, Disc, Music, ArrowUpRight, Sparkles, HelpCircle, MessageSquare, ExternalLink, Github, Linkedin, Twitter, Instagram, ChevronDown, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { portfolioData } from '@/data/portfolio';
 import dynamic from 'next/dynamic';
 
-const Lanyard = dynamic<{ position?: [number, number, number], gravity?: [number, number, number], isLowPowerMode?: boolean }>(() => import('@/components/three/Lanyard').then(mod => mod.Lanyard), {
+const World = dynamic(() => import('@/components/ui/globe').then(mod => mod.World), {
     ssr: false,
     loading: () => <div className="w-full h-full flex items-center justify-center bg-transparent"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>
 });
@@ -302,6 +302,37 @@ export default function ContactPage() {
     const t = useTranslations('contact');
     const { isLowPowerMode } = usePerformance();
 
+    const arcData = [
+        { order: 1, startLat: 37.7749, startLng: -122.4194, endLat: 51.5074, endLng: -0.1278, arcAlt: 0.3, color: '#3b82f6' },
+        { order: 2, startLat: 51.5074, startLng: -0.1278, endLat: 35.6762, endLng: 139.6503, arcAlt: 0.3, color: '#10b981' },
+        { order: 3, startLat: 35.6762, startLng: 139.6503, endLat: -33.8688, endLng: 151.2093, arcAlt: 0.3, color: '#8b5cf6' },
+        { order: 4, startLat: -33.8688, startLng: 151.2093, endLat: 1.3521, endLng: 103.8198, arcAlt: 0.3, color: '#3b82f6' },
+        { order: 5, startLat: 1.3521, startLng: 103.8198, endLat: 37.7749, endLng: -122.4194, arcAlt: 0.3, color: '#10b981' },
+    ];
+
+    const globeConfig = {
+        pointSize: 4,
+        globeColor: "#0f172a",
+        showAtmosphere: true,
+        atmosphereColor: "#38bdf8",
+        atmosphereAltitude: 0.1,
+        emissive: "#0f172a",
+        emissiveIntensity: 0.5,
+        shininess: 0.9,
+        polygonColor: "rgba(255,255,255,0.7)",
+        ambientLight: "#38bdf8",
+        directionalLeftLight: "#ffffff",
+        directionalTopLight: "#ffffff",
+        pointLight: "#ffffff",
+        arcTime: 2000,
+        arcLength: 0.9,
+        rings: 1,
+        maxRings: 3,
+        initialPosition: { lat: 22.3193, lng: 114.1694 },
+        autoRotate: true,
+        autoRotateSpeed: 0.5,
+    };
+
     const getSocialItem = (platform: string) => {
         const link = portfolioData.personal.socialLinks.find(l => l.platform.toLowerCase() === platform);
         return {
@@ -371,25 +402,20 @@ export default function ContactPage() {
                 <div className="container-creative px-4 md:px-8 max-w-[1800px] mx-auto pb-40">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
 
-                        {/* LEFT COLUMN: Lanyard */}
+                        {/* LEFT COLUMN: Global Presence Globe */}
                         <div className="col-span-1 lg:col-span-4 relative lg:sticky top-0 h-[400px] md:h-[500px] lg:h-[90vh] pointer-events-none z-20">
-                            {/* Anchor Slot/Bar for Lanyard */}
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 md:w-64 lg:w-96 h-2 bg-gradient-to-r from-transparent via-foreground/20 to-transparent blur-[2px] rounded-full z-30 mt-[-1px]" />
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 md:w-32 lg:w-48 h-[3px] bg-gradient-to-r from-transparent via-foreground/40 to-transparent rounded-full z-30" />
-
                             <DeferredMount fallback={<div className="w-full h-full flex items-center justify-center opacity-50"><Loader2 className="w-8 h-8 animate-spin" /></div>}>
-                                <div className="w-full h-full pointer-events-auto overflow-visible">
+                                <div className="w-full h-full pointer-events-auto overflow-visible flex items-center justify-center">
                                     {!isLowPowerMode ? (
-                                        <ErrorBoundary fallback={<div className="w-full h-full flex items-center justify-center opacity-50">Interactive Card Unavailable</div>}>
-                                            <Lanyard position={[0, 0, 15]} gravity={[0, -40, 0]} isLowPowerMode={isLowPowerMode} />
+                                        <ErrorBoundary fallback={<div className="w-full h-full flex items-center justify-center opacity-50">Globe Unavailable</div>}>
+                                            <div className="w-full aspect-square relative mix-blend-screen overflow-hidden rounded-full">
+                                                <World globeConfig={globeConfig} data={arcData} />
+                                            </div>
                                         </ErrorBoundary>
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center p-8">
-                                            <div className="relative w-full max-w-sm aspect-[3/4] rounded-3xl overflow-hidden border border-white/10 bg-primary/5">
-                                                <div className="absolute inset-0 flex items-center justify-center text-muted-foreground/20 italic font-serif">
-                                                    Archive ID // Static
-                                                </div>
-                                            </div>
+                                        <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center text-muted-foreground/40 font-serif italic">
+                                            <Globe className="w-24 h-24 mb-4 opacity-20" />
+                                            <span>Global Operations</span>
                                         </div>
                                     )}
                                 </div>

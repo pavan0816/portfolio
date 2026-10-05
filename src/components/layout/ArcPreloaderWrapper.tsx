@@ -1,12 +1,11 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { ArcRevealHero } from "@/components/ui/arc-preloader-hero";
+import { PremiumPageTransition } from "@/components/ui/premium-page-transition";
 
 export function ArcPreloaderWrapper({ children }: { children: React.ReactNode }) {
     return (
-        <ArcRevealHero>
+        <PremiumPageTransition>
             {children}
-        </ArcRevealHero>
+        </PremiumPageTransition>
     );
 }

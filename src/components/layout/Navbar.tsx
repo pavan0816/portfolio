@@ -5,64 +5,33 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Menu, X, Moon, Sun, Globe, ChevronDown, Focus } from 'lucide-react';
+import { Menu, X, Globe } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
+import { usePreloadState } from '@/components/ui/premium-page-transition';
 
-import CardNav from '@/components/ui/CardNav';
-import { AnimatedThemeToggler } from '@/components/ui/animated-theme-toggler';
-import { usePreloadState } from '@/components/ui/arc-preloader-hero';
+const NAV_ITEMS = [
+    { key: 'home', anchor: '#hero' },
+    { key: 'about-us', anchor: '#about-us', label: 'About' },
+    { key: 'services', anchor: '#projects' },
+    { key: 'experience', anchor: '#experience' },
+    { key: 'projects', anchor: '#projects' },
+    { key: 'contact', anchor: '#contact' },
+];
 
-function Clock() {
-    const [time, setTime] = useState<string>('');
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-        const updateTime = () => {
-            const now = new Date();
-            const h = String(now.getHours()).padStart(2, '0');
-            const m = String(now.getMinutes()).padStart(2, '0');
-            const s = String(now.getSeconds()).padStart(2, '0');
-            setTime(`${h}:${m}:${s}`);
-        };
-
-        updateTime();
-        const interval = setInterval(updateTime, 1000);
-        return () => clearInterval(interval);
-    }, []);
-
-    if (!mounted) return <span className="font-mono text-xl md:text-2xl font-black opacity-0">00:00:00</span>;
-
-    return (
-        <span className="font-mono text-xl md:text-2xl font-black text-gradient tracking-widest hover:tracking-[0.2em] transition-all duration-300">
-            {time}
-        </span>
-    );
+function smoothScrollTo(anchor: string) {
+    const id = anchor.replace('#', '');
+    const el = document.getElementById(id);
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (anchor === '#hero') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 }
-
-// Sub-links for the "About" dropdown
-// Sub-links for the "About" dropdown
-const useNavItems = () => {
-    const t = useTranslations('navigation.menu');
-    return [
-        {
-            label: "About",
-            links: [
-                { label: t('achievements'), href: "/achievements", description: t('achievementsDesc') },
-                { label: t('skills'), href: "/skills", description: t('skillsDesc') },
-                { label: t('experience'), href: "/experience", description: t('experienceDesc') },
-                { label: t('projects'), href: "/projects", description: t('projectsDesc') },
-                { label: t('blog'), href: "/blog", description: t('blogDesc') },
-            ]
-        }
-    ];
-};
 
 export function Navbar() {
     const t = useTranslations('navigation');
-    const navItems = useNavItems();
-    const { theme, setTheme, resolvedTheme } = useTheme();
+    const { resolvedTheme } = useTheme();
     const pathname = usePathname();
     const { scrollY } = useScroll();
 
@@ -70,55 +39,39 @@ export function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [lastScrollY, setLastScrollY] = useState(0);
-    const [mounted, setMounted] = useState(false);
     const [currentLocale, setCurrentLocale] = useState('en');
     
-    // Consume preload state directly from context
     const { isPreloading: isPreloadActive } = usePreloadState();
-
-    const isDark = resolvedTheme === 'dark';
+    const isDark = resolvedTheme === 'dark' || true;
 
     useEffect(() => {
-        setMounted(true);
         const locale = document.cookie.split('; ').find(row => row.startsWith('locale='))?.split('=')[1] || 'en';
         setCurrentLocale(locale);
     }, []);
 
-    // Lock body scroll when menu is open
     useEffect(() => {
         if (isMenuOpen) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = '';
         }
-        return () => {
-            document.body.style.overflow = '';
-        };
+        return () => { document.body.style.overflow = ''; };
     }, [isMenuOpen]);
 
-    // Close menu on route change
-    useEffect(() => {
-        setIsMenuOpen(false);
-    }, [pathname]);
-
     useMotionValueEvent(scrollY, 'change', (latest) => {
-        if (isMenuOpen) return; // Don't hide navbar when menu is open
-
+        if (isMenuOpen) return;
         const direction = latest > lastScrollY ? 'down' : 'up';
         setIsScrolled(latest > 50);
-
         if (direction === 'down' && latest > 100) {
             setIsVisible(false);
         } else {
             setIsVisible(true);
         }
-
         setLastScrollY(latest);
     });
 
-    const toggleMenu = useCallback(() => {
-        setIsMenuOpen((prev) => !prev);
-    }, []);
+    const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), []);
+    const closeMenu = useCallback(() => setIsMenuOpen(false), []);
 
     const toggleLocale = useCallback(() => {
         const newLocale = currentLocale === 'en' ? 'id' : 'en';
@@ -127,219 +80,154 @@ export function Navbar() {
         window.location.reload();
     }, [currentLocale]);
 
-    const closeMenu = useCallback(() => {
-        setIsMenuOpen(false);
-    }, []);
-
-    const handleHomeClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
-        if (pathname === '/') {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, anchor: string) => {
+        e.preventDefault();
         closeMenu();
+        // If we're on the homepage, smooth-scroll. Otherwise, navigate to / first.
+        if (pathname === '/') {
+            smoothScrollTo(anchor);
+        } else {
+            window.location.href = '/' + anchor;
+        }
     }, [pathname, closeMenu]);
-
-    // Animation variants
-    const navVariants = {
-        visible: { y: 0, opacity: 1 },
-        hidden: { y: -100, opacity: 0 }
-    };
-
-    const menuVariants = {
-        closed: { opacity: 0 },
-        open: { opacity: 1 }
-    };
 
     return (
         <>
             <motion.nav
-                variants={navVariants}
-                initial="hidden"
-                animate={!isPreloadActive && (isVisible || isMenuOpen) ? 'visible' : 'hidden'}
-                transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: !isPreloadActive && (isVisible || isMenuOpen) ? 0 : -100, opacity: 1 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 className="fixed top-0 left-0 right-0 z-[100]"
             >
-                <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24 py-4 md:py-6">
+                <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24 py-6">
                     <motion.div
                         className={cn(
-                            'flex items-center justify-between transition-all duration-500 rounded-full',
-                            isScrolled ? 'glass-strong px-6 py-3' : 'py-2'
+                            'flex items-center justify-between transition-all duration-700',
+                            isScrolled 
+                              ? 'bg-[#020202]/80 backdrop-blur-md border border-white/5 rounded-full px-8 py-4 shadow-[0_4px_30px_rgba(0,0,0,0.8)]' 
+                              : 'py-2'
                         )}
                         layout
                     >
-                        {/* Make the Clock a Link to Home */}
-                        <Link href="/" className="relative group min-w-[120px]" onClick={handleHomeClick}>
-                            <Clock />
-                        </Link>
-
-                        {/* Desktop Navigation with CardNav */}
-                        <div className="hidden lg:flex items-center gap-6">
-                            {/* HOME */}
-                            <Link
-                                href="/"
-                                onClick={handleHomeClick}
-                                className={cn(
-                                    'relative px-5 py-2 text-sm font-bold transition-all duration-300 rounded-full group',
-                                    pathname === '/' ? 'text-foreground bg-muted' : 'text-muted-foreground hover:text-foreground'
-                                )}
-                            >
-                                <span className="relative z-10">{t('home')}</span>
-                            </Link>
-
-                            <CardNav
-                                items={navItems}
-                                theme={isDark ? 'dark' : 'light'}
-                                pathname={pathname}
+                        {/* LOGO */}
+                        <a 
+                            href="#hero" 
+                            onClick={(e) => handleNavClick(e, '#hero')}
+                            className="relative group min-w-[120px] flex items-center z-[110]"
+                        >
+                            <motion.img 
+                                src={isDark ? '/logo-dark.svg' : '/logo.svg'} 
+                                alt="InfusionX" 
+                                className="h-6 md:h-8 w-auto object-contain" 
                             />
+                        </a>
 
-                            {/* CONTACT (Direct Link) */}
-                            <Link
-                                href="/contact"
-                                className={cn(
-                                    'relative px-5 py-2 text-sm font-bold transition-all duration-300 rounded-full group',
-                                    pathname === '/contact' ? 'text-foreground bg-muted' : 'text-muted-foreground hover:text-foreground'
-                                )}
-                            >
-                                <span className="relative z-10">{t('contact')}</span>
-                            </Link>
+                        {/* DESKTOP NAV */}
+                        <div className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+                            {NAV_ITEMS.filter(item => item.key !== 'contact').map((item) => (
+                                <a
+                                    key={item.key}
+                                    href={item.anchor}
+                                    onClick={(e) => handleNavClick(e, item.anchor)}
+                                    className="relative group overflow-hidden"
+                                >
+                                    <span className="relative z-10 text-xs tracking-[0.2em] font-medium uppercase transition-colors duration-500 text-white/40 group-hover:text-white">
+                                        {'label' in item ? item.label : t(item.key)}
+                                    </span>
+                                </a>
+                            ))}
                         </div>
 
-                        {/* Controls */}
-                        <div className="flex items-center gap-2 md:gap-3">
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="p-2 md:p-2.5 rounded-full bg-muted/80 hover:bg-muted transition-colors"
-                                aria-label="Focus mode"
-                            >
-                                <Link href="https://arfazrllworkspace.vercel.app/" target="_blank" rel="noopener noreferrer">
-                                    <Focus className="w-4 h-4" />
-                                </Link>
-                            </motion.button>
-
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                        {/* DESKTOP CONTROLS */}
+                        <div className="hidden lg:flex items-center gap-6 z-[110]">
+                            <button
                                 onClick={toggleLocale}
-                                className="p-2 md:p-2.5 rounded-full bg-muted/80 hover:bg-muted transition-colors"
-                                aria-label="Toggle language"
+                                className="text-xs tracking-[0.2em] font-medium uppercase text-white/40 hover:text-white transition-colors duration-500 flex items-center gap-2"
                             >
-                                <Globe className="w-4 h-4" />
-                            </motion.button>
-
-                            {mounted && (
-                                <AnimatedThemeToggler />
-                            )}
-
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={toggleMenu}
-                                className="p-2 md:p-2.5 rounded-full bg-muted/80 hover:bg-muted transition-colors lg:hidden"
-                                aria-label="Toggle menu"
+                                <Globe className="w-3 h-3" />
+                                {currentLocale.toUpperCase()}
+                            </button>
+                            <a
+                                href="#contact"
+                                onClick={(e) => handleNavClick(e, '#contact')}
+                                className="px-6 py-2.5 rounded-full border border-white/20 text-xs tracking-[0.2em] font-medium uppercase text-white hover:bg-white hover:text-black transition-all duration-500"
                             >
-                                <AnimatePresence mode="wait" initial={false}>
-                                    <motion.div
-                                        key={isMenuOpen ? 'close' : 'menu'}
-                                        initial={{ rotate: -90, opacity: 0 }}
-                                        animate={{ rotate: 0, opacity: 1 }}
-                                        exit={{ rotate: 90, opacity: 0 }}
-                                        transition={{ duration: 0.2 }}
-                                    >
-                                        {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                                    </motion.div>
-                                </AnimatePresence>
-                            </motion.button>
+                                {t('contact')}
+                            </a>
                         </div>
+
+                        {/* MOBILE TOGGLE */}
+                        <button
+                            onClick={toggleMenu}
+                            className="p-3 -mr-3 rounded-full text-white/70 hover:text-white transition-colors lg:hidden z-[110]"
+                        >
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={isMenuOpen ? 'close' : 'menu'}
+                                    initial={{ rotate: -90, opacity: 0 }}
+                                    animate={{ rotate: 0, opacity: 1 }}
+                                    exit={{ rotate: 90, opacity: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                                </motion.div>
+                            </AnimatePresence>
+                        </button>
                     </motion.div>
                 </div>
-            </motion.nav >
+            </motion.nav>
 
-            {/* Mobile Menu Overlay */}
+            {/* CINEMATIC MOBILE MENU */}
             <AnimatePresence>
-                {
-                    isMenuOpen && (
+                {isMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0, transition: { delay: 0.2 } }}
+                        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                        className="fixed inset-0 z-[90] lg:hidden bg-black flex flex-col justify-center items-center"
+                    >
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] bg-white/5 rounded-full blur-[100px] pointer-events-none" />
+                        
+                        <nav className="flex flex-col items-center gap-8 w-full px-8 relative z-10">
+                            {NAV_ITEMS.map((item, i) => (
+                                <div key={item.key} className="overflow-hidden">
+                                    <motion.div
+                                        initial={{ y: "100%", opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        exit={{ y: "-100%", opacity: 0 }}
+                                        transition={{ duration: 0.8, delay: 0.1 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                                    >
+                                        <a
+                                            href={item.anchor}
+                                            onClick={(e) => handleNavClick(e, item.anchor)}
+                                            className="text-4xl sm:text-5xl font-display font-medium tracking-tight transition-colors uppercase text-white/20 hover:text-white"
+                                        >
+                                            {'label' in item ? item.label : t(item.key)}
+                                        </a>
+                                    </motion.div>
+                                </div>
+                            ))}
+                        </nav>
+                        
                         <motion.div
-                            variants={menuVariants}
-                            initial="closed"
-                            animate="open"
-                            exit="closed"
-                            transition={{ duration: 0.3 }}
-                            className="fixed inset-0 z-[90] lg:hidden"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.5, delay: 0.5 }}
+                            className="absolute bottom-12 left-0 right-0 flex justify-center"
                         >
-                            <motion.div
-                                className="absolute inset-0 bg-background"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                            />
-
-                            <div className="relative flex flex-col items-center justify-center h-full overflow-y-auto py-20">
-                                <nav className="flex flex-col items-center gap-6">
-                                    {/* Mobile Home */}
-                                    <Link
-                                        href="/"
-                                        onClick={handleHomeClick}
-                                        className="text-3xl font-black text-muted-foreground hover:text-foreground transition-colors"
-                                    >
-                                        {t('home')}
-                                    </Link>
-
-                                    <Link
-                                        href="/contact"
-                                        onClick={closeMenu}
-                                        className="text-3xl font-black text-muted-foreground hover:text-foreground transition-colors"
-                                    >
-                                        {t('contact')}
-                                    </Link>
-
-                                    {/* Mobile Links grouped by Categories */}
-                                    {navItems.map((category) => (
-                                        <div key={category.label} className="flex flex-col items-center gap-4 py-4 border-b border-white/5 w-full last:border-0 text-center">
-                                            <span className="text-[10px] font-black font-mono text-primary tracking-[0.3em] uppercase opacity-50">
-                                                {category.label}
-                                            </span>
-                                            {category.links.map((link) => (
-                                                <Link
-                                                    key={link.label}
-                                                    href={link.href}
-                                                    onClick={closeMenu}
-                                                    className={cn(
-                                                        'text-2xl font-bold transition-all hover:scale-110 active:scale-95 duration-200',
-                                                        pathname === link.href ? 'text-foreground' : 'text-muted-foreground/60 hover:text-foreground'
-                                                    )}
-                                                >
-                                                    {link.label}
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    ))}
-                                </nav>
-
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: 20 }}
-                                    transition={{ delay: 0.5 }}
-                                    className="flex items-center gap-4 mt-12"
-                                >
-                                    <button
-                                        onClick={toggleLocale}
-                                        className="px-6 py-3 rounded-full glass-card text-sm font-medium hover:bg-muted/50 transition-colors"
-                                    >
-                                        {currentLocale === 'en' ? 'English' : 'Indonesia'}
-                                    </button>
-                                    {mounted && (
-                                        <AnimatedThemeToggler
-                                            className="px-6 py-6 glass-card text-sm font-medium hover:bg-muted/50 flex items-center gap-2"
-                                        />
-                                    )}
-                                </motion.div>
-                            </div>
-                        </motion.div >
-                    )
-                }
-            </AnimatePresence >
+                            <button
+                                onClick={toggleLocale}
+                                className="flex items-center gap-2 text-xs tracking-[0.2em] font-medium uppercase text-white/40 hover:text-white transition-colors"
+                            >
+                                <Globe className="w-4 h-4" />
+                                {currentLocale === 'en' ? 'ENGLISH' : 'INDONESIA'}
+                            </button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     );
 }

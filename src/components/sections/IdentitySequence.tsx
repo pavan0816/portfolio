@@ -96,7 +96,14 @@ export const IdentitySequence = ({ scrollYProgress, isVisible }: IdentitySequenc
     );
 
     const { resolvedTheme } = useTheme();
-    const cardBgValue = resolvedTheme === 'dark' ? cardBgDark : cardBg;
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const isDark = mounted && resolvedTheme === 'dark';
+    const cardBgValue = isDark ? cardBgDark : cardBg;
 
     // Dynamic vault frame gradients that always match the card's transitioning background
     const vaultGradientDown = useTransform(cardBgValue, (color: string) => {

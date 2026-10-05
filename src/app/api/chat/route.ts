@@ -39,9 +39,9 @@ function buildSystemPrompt(locale: string = 'en'): string {
         .map((a: any) => `- ${a.title}: ${a.description ?? ''}`)
         .join('\n');
 
-    return `You are an AI assistant for ${personal.name}'s portfolio website. You are friendly, helpful, and knowledgeable about ${personal.name}'s background. Answer questions accurately based on the information below.
+    return `You are the official AI assistant for ${personal.name}. You are friendly, helpful, and highly knowledgeable about our company's services and digital products. Answer questions accurately based on the information below.
 
-## Personal Info
+## Company Info
 - Name: ${personal.name}
 - Title: ${personal.title}
 - Subtitle: ${personal.subtitle}
@@ -76,11 +76,10 @@ ${achievementList || 'See portfolio for details.'}
 ## Instructions
 - Answer in ${locale === 'id' ? 'Indonesian' : 'English'} (the current interface language). However, if the user asks in a different language, feel free to respond in that language too, while maintaining a professionally friendly tone.
 - Be concise but informative. Use bullet points for lists.
-- If asked about something not in the portfolio, politely say you only have information about ${personal.name}'s portfolio.
-- When recommending projects, include demo links if available.
+- If asked about something not in the company profile, politely say you only have information about ${personal.name}'s services.
 - Always be positive and professional about ${personal.name}'s work.
 - Do NOT make up information not present above.
-- Greet users warmly and encourage them to explore the portfolio website.`;
+- Greet users warmly and encourage them to explore our services.`;
 }
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -132,11 +131,36 @@ async function callGemini(messages: Message[], systemPrompt: string): Promise<st
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) throw new Error('GEMINI_API_KEY not configured');
 
-    // Convert messages to Gemini format
-    const geminiContents = messages.map((m) => ({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }],
-    }));
+    // Convert messages to Gemini format, ensuring alternating roles and starting with 'user'
+    const geminiContents = [];
+    let lastRole = '';
+
+    for (const m of messages) {
+        const role = m.role === 'assistant' ? 'model' : 'user';
+        
+        // Gemini API rules:
+        // 1. First message must be 'user'
+        if (geminiContents.length === 0 && role !== 'user') {
+            continue; // Skip leading model messages
+        }
+        
+        // 2. Roles must alternate strictly
+        if (role === lastRole) {
+            // Append to the last message instead of creating a new one
+            geminiContents[geminiContents.length - 1].parts[0].text += `\n\n${m.content}`;
+        } else {
+            geminiContents.push({
+                role: role,
+                parts: [{ text: m.content }],
+            });
+            lastRole = role;
+        }
+    }
+    
+    // If empty after filtering (e.g., only contained assistant messages), add a dummy user message
+    if (geminiContents.length === 0) {
+        geminiContents.push({ role: 'user', parts: [{ text: 'Hello' }] });
+    }
 
     const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
@@ -200,6 +224,32 @@ export async function POST(req: NextRequest) {
         let reply: string;
         let provider: string;
 
+        if (!process.env.GROQ_API_KEY && !process.env.GEMINI_API_KEY) {
+            // Provide a mock intelligent response for demo purposes when keys are missing
+            const lastMessage = messages[messages.length - 1]?.content?.toLowerCase() || '';
+            
+            let mockReply = "Hello! I am the InfusionX AI assistant. Our live API keys are currently not configured, but I'm operating in demo mode. How can I help you learn about our services?";
+            
+            if (lastMessage.includes('hi') || lastMessage.includes('hello') || lastMessage.includes('hey')) {
+                mockReply = "Hello there! 👋 I'm the InfusionX AI assistant. What would you like to know about our digital agency and services?";
+            } else if (lastMessage.includes('what is ai') || lastMessage.includes('artificial intelligence')) {
+                mockReply = "At InfusionX, we build intelligent AI-powered solutions. This includes integrating predictive models, large language models (LLMs), and automated workflows into scalable software to help businesses grow faster.";
+            } else if (lastMessage.includes('services') || lastMessage.includes('what do you do')) {
+                mockReply = "We specialize in end-to-end digital product development! Our core services include:\n- Websites & Web Applications\n- Mobile Applications\n- AI & Specialized Solutions\n- Data Analytics\n- Dedicated Operations";
+            } else if (lastMessage.includes('project') || lastMessage.includes('portfolio')) {
+                mockReply = "We've built a variety of high-performance projects ranging from enterprise SaaS platforms to AI-driven tools. You can explore our featured work in the Projects section!";
+            } else if (lastMessage.includes('contact') || lastMessage.includes('email') || lastMessage.includes('hire')) {
+                mockReply = "We'd love to hear from you! You can reach out to us via the Contact form on our website or email us directly at hello@infusionx.com.";
+            } else if (lastMessage.length > 0) {
+                mockReply = "That's an interesting question! (Demo Mode: To get real-time dynamic answers, please configure the Groq or Gemini API keys in the .env file). Our team is always ready to discuss custom software and AI solutions.";
+            }
+
+            return NextResponse.json({ 
+                reply: mockReply, 
+                provider: 'demo-mode' 
+            });
+        }
+
         // Try Groq first, then fallback to Gemini
         try {
             reply = await callGroq(messages, systemPrompt);
@@ -211,12 +261,20 @@ export async function POST(req: NextRequest) {
                 provider = 'gemini';
             } catch (geminiError) {
                 console.error('[Chat] Gemini also failed:', geminiError);
+                
+                const groqMsg = groqError instanceof Error ? groqError.message : String(groqError);
+                const geminiMsg = geminiError instanceof Error ? geminiError.message : String(geminiError);
+                
+                const isConfigError = groqMsg.includes('not configured') && geminiMsg.includes('not configured');
+                
                 return NextResponse.json(
                     {
-                        error: 'Both AI providers are currently unavailable. Please try again later.',
+                        error: isConfigError 
+                            ? 'AI providers are not configured. Please add GROQ_API_KEY or GEMINI_API_KEY to your .env file to enable the AI Agent.'
+                            : 'Both AI providers are currently unavailable. Please try again later.',
                         details: {
-                            groq: groqError instanceof Error ? groqError.message : String(groqError),
-                            gemini: geminiError instanceof Error ? geminiError.message : String(geminiError),
+                            groq: groqMsg,
+                            gemini: geminiMsg,
                         },
                     },
                     { status: 503 }

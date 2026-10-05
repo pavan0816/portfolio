@@ -1,112 +1,185 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Link from "next/link";
-import { useTranslations } from 'next-intl';
-import { Mail, Layers } from "lucide-react";
-import { InfiniteRibbon } from "@/components/ui/infinite-ribbon";
-import { MagneticButton } from "@/components/ui/magnetic-button";
 
-if (typeof window !== "undefined") {
-    gsap.registerPlugin(ScrollTrigger);
-}
+import React, { useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ChevronDown, Send } from "lucide-react";
 
 export default function CTASection() {
     const sectionRef = useRef<HTMLElement>(null);
-    const t = useTranslations('ctaSection');
-    const words = [t('words.amazing'), t('words.innovative'), t('words.intelligent'), t('words.creative')];
-    const [currentWord, setCurrentWord] = useState(0);
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start end", "end start"],
+    });
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentWord((prev) => (prev + 1) % words.length);
-        }, 2500);
-        return () => clearInterval(interval);
-    }, [words.length]);
+    const y = useTransform(scrollYProgress, [0, 1], [-150, 150]);
+    const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.9]);
+    const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0]);
 
-    useEffect(() => {
-        if (!sectionRef.current) return;
+    const [formState, setFormState] = useState({
+        fullName: "",
+        email: "",
+        mobile: "",
+        projectType: "",
+        details: ""
+    });
 
-        const ctx = gsap.context(() => {
-            gsap.fromTo('.cta-content',
-                { y: 80, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 1,
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: 'top 70%',
-                    },
-                }
-            );
-        }, sectionRef);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-        return () => ctx.revert();
-    }, []);
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        // Simulate submission
+        setTimeout(() => {
+            setIsSubmitting(false);
+            alert("Message sent successfully!");
+            setFormState({ fullName: "", email: "", mobile: "", projectType: "", details: "" });
+        }, 1500);
+    };
+
+    const projectTypes = [
+        "I need an E-commerce Website to sell online",
+        "I need a Professional Website for my business",
+        "I need a Professional Portfolio for my work",
+        "I need a Booking/Appointment system for my service",
+        "I want to grow my presence on Google (SEO)",
+        "I need help with Branding & Social Media",
+        "I want to fix or update my existing Website",
+        "I need a Custom solution for my business",
+        "Other Inquiry"
+    ];
 
     return (
-        <section ref={sectionRef} className="relative py-12 lg:py-16 overflow-hidden bg-background">
-            {/* Infinite Ribbons - Moved from Stats Section */}
-            <div className="relative flex h-[300px] w-full items-center justify-center pointer-events-none mb-10">
-                <InfiniteRibbon rotation={6} baseVelocity={1} className="z-10 py-5 border-y border-blue-200 dark:border-white/5 shadow-xl" background="bg-white dark:bg-zinc-900" textColor="text-blue-700 dark:text-zinc-400 font-mono tracking-tighter">
-                    {t('ribbon1')}
-                </InfiniteRibbon>
-                <InfiniteRibbon rotation={-6} reverse={true} baseVelocity={1.2} className="z-20 py-5 border-y border-white/40 dark:border-white/10 shadow-2xl" background="bg-blue-600 dark:bg-black" textColor="text-white font-bold tracking-widest uppercase">
-                    {t('ribbon2')}
-                </InfiniteRibbon>
-            </div>
+        <section id="contact" ref={sectionRef} className="relative flex items-center justify-center overflow-hidden bg-black z-10 pt-20 pb-16">
+            {/* Atmospheric Climax Background */}
+            <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none z-10" />
+            
+            <motion.div 
+                style={{ y, scale, opacity }}
+                className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            >
+                {/* Slow moving cinematic gradient */}
+                <motion.div
+                    animate={{
+                        scale: [1, 1.2, 1],
+                        rotate: [0, 90, 0],
+                    }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    className="w-[120vw] h-[120vw] md:w-[80vw] md:h-[80vw] bg-[conic-gradient(from_0deg,transparent_0_340deg,rgba(255,255,255,0.05)_360deg)] rounded-full blur-[100px]"
+                />
+            </motion.div>
 
+            {/* Glowing orb behind text */}
+            <motion.div
+                animate={{
+                    scale: [1, 1.1, 1],
+                    opacity: [0.3, 0.5, 0.3],
+                }}
+                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-white/10 rounded-full blur-[120px] pointer-events-none"
+            />
 
+            <div className="relative z-20 w-full max-w-5xl mx-auto px-6 text-center">
+                <motion.div
+                    initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+                >
+                    <h2 className="hero-title text-white mb-8 uppercase">
+                        Send us a <br />
+                        <span className="text-zinc-600">Message</span>
+                    </h2>
 
-            <div className="max-w-[1600px] mx-auto relative z-10 px-6 md:px-12 lg:px-24 text-center cta-content mt-16">
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-0">
-                    {t('title')}
-                    <br />
-                    <span className="inline-grid place-items-center pb-4">
-                        {/* Invisible longest word ensures the container NEVER changes width/height */}
-                        <span className="col-start-1 row-start-1 invisible pointer-events-none text-gradient mx-2 pb-2">
-                            {words.reduce((a, b) => a.length > b.length ? a : b, "")}
-                        </span>
-                        <AnimatePresence mode="wait">
-                            <motion.span
-                                key={words[currentWord]}
-                                initial={{ y: 30, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                exit={{ y: -30, opacity: 0 }}
-                                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                                className="col-start-1 row-start-1 inline-block text-gradient mx-2 pb-2"
+                    <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto text-left space-y-6 relative z-30">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Full Name */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-semibold tracking-wider text-zinc-400 uppercase">Full name</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="Your full name"
+                                    required
+                                    value={formState.fullName}
+                                    onChange={(e) => setFormState({...formState, fullName: e.target.value})}
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300"
+                                />
+                            </div>
+
+                            {/* Work Email */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-semibold tracking-wider text-zinc-400 uppercase">Work email</label>
+                                <input 
+                                    type="email" 
+                                    placeholder="you@company.com"
+                                    required
+                                    value={formState.email}
+                                    onChange={(e) => setFormState({...formState, email: e.target.value})}
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Mobile Number */}
+                        <div className="space-y-2">
+                            <label className="text-sm font-semibold tracking-wider text-zinc-400 uppercase">Mobile number</label>
+                            <input 
+                                type="tel" 
+                                placeholder="+91 98765 43210"
+                                value={formState.mobile}
+                                onChange={(e) => setFormState({...formState, mobile: e.target.value})}
+                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300"
+                            />
+                        </div>
+
+                        {/* Project Type */}
+                        <div className="space-y-2 relative">
+                            <label className="text-sm font-semibold tracking-wider text-zinc-400 uppercase">What are you looking for?</label>
+                            <div className="relative">
+                                <select 
+                                    required
+                                    value={formState.projectType}
+                                    onChange={(e) => setFormState({...formState, projectType: e.target.value})}
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white appearance-none focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300 cursor-pointer"
+                                >
+                                    <option value="" disabled className="bg-zinc-900 text-zinc-500">Choose a project type</option>
+                                    {projectTypes.map((type, i) => (
+                                        <option key={i} value={type} className="bg-zinc-900 text-white">{type}</option>
+                                    ))}
+                                </select>
+                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 pointer-events-none" />
+                            </div>
+                        </div>
+
+                        {/* Details */}
+                        <div className="space-y-2">
+                            <label className="text-sm font-semibold tracking-wider text-zinc-400 uppercase">Tell us about your project</label>
+                            <textarea 
+                                placeholder="Briefly describe your business, goals, and timeline..."
+                                required
+                                rows={4}
+                                value={formState.details}
+                                onChange={(e) => setFormState({...formState, details: e.target.value})}
+                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300 resize-none"
+                            />
+                        </div>
+
+                        {/* Submit */}
+                        <div className="pt-4 flex justify-center">
+                            <button 
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="group relative inline-flex items-center gap-3 bg-white/5 border border-white/10 text-white px-10 py-5 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-white/10 transition-all duration-300 disabled:opacity-70 disabled:hover:bg-white/5"
                             >
-                                {words[currentWord]}
-                            </motion.span>
-                        </AnimatePresence>
-                    </span>
-                    <span className="whitespace-nowrap">{t('together')}</span>
-                </h2>
-
-                <p className="text-xl text-muted-foreground max-w-4xl mx-auto mt-4 mb-10 text-center">
-                    {t('subtitle').split('. ').map((sentence, i, arr) => (
-                        <span key={i}>
-                            {sentence}{i < arr.length - 1 ? '.' : ''}
-                            {i < arr.length - 1 && <br className="hidden md:block" />}
-                            {i < arr.length - 1 && " "}
-                        </span>
-                    ))}
-                </p>
-
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                    <MagneticButton href="/contact" variant="primary" className="text-lg px-10 py-5">
-                        <Mail className="w-5 h-5" />
-                        <span>{t('start')}</span>
-                    </MagneticButton>
-                    <MagneticButton href="/resume" variant="outline" className="text-lg px-10 py-5">
-                        <Layers className="w-5 h-5" />
-                        <span>{t('work')}</span>
-                    </MagneticButton>
-                </div>
+                                {isSubmitting ? "Sending..." : "Send Message"}
+                                {!isSubmitting && <Send className="w-4 h-4 text-zinc-400 group-hover:text-white group-hover:translate-x-1 transition-all" />}
+                            </button>
+                        </div>
+                    </form>
+                </motion.div>
             </div>
+            
+            {/* Fade to footer */}
+            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-20 pointer-events-none" />
         </section>
     );
 }

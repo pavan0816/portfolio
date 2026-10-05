@@ -1,5 +1,6 @@
+
 import type { Metadata, Viewport } from 'next';
-import { Inter, JetBrains_Mono, Playfair_Display, Alex_Brush } from 'next/font/google';
+import { Space_Grotesk, Inter, JetBrains_Mono } from 'next/font/google';
 import { getMessages, getLocale } from 'next-intl/server';
 import { ThemeProvider, I18nProvider, SmoothScrollProvider } from '@/providers';
 
@@ -7,52 +8,48 @@ import '@/styles/globals.css';
 
 const inter = Inter({
     subsets: ['latin'],
-    variable: '--font-inter',
+    variable: '--font-sans',
     display: 'swap',
+    weight: ['300', '400', '500', '600'],
+});
+
+const spaceGrotesk = Space_Grotesk({
+    subsets: ['latin'],
+    variable: '--font-display',
+    display: 'swap',
+    weight: ['300', '400', '500', '600', '700'],
 });
 
 const jetbrainsMono = JetBrains_Mono({
     subsets: ['latin'],
-    variable: '--font-jetbrains',
+    variable: '--font-mono',
     display: 'swap',
-});
-
-const playfair = Playfair_Display({
-    subsets: ['latin'],
-    variable: '--font-playfair',
-    display: 'swap',
-});
-
-const signature = Alex_Brush({
-    weight: '400',
-    subsets: ['latin'],
-    variable: '--font-signature',
-    display: 'swap',
+    weight: ['400', '500', '700'],
 });
 
 export const metadata: Metadata = {
     title: {
-        default: 'Arfazrll | AI & Software Engineer',
-        template: '%s | Portfolio',
+        default: 'InfusionX | Digital Agency',
+        template: '%s | InfusionX',
     },
-    description: 'A passionate developer building digital experiences that inspire. Explore my projects, skills, and professional journey.',
-    keywords: ['developer', 'portfolio', 'web development', 'full stack', 'react', 'nextjs'],
-    authors: [{ name: 'Your Name' }],
-    creator: 'Your Name',
-    metadataBase: new URL('https://your-domain.com'),
+    description: 'Building Intelligent Digital Products That Drive Growth',
+    keywords: ['digital agency', 'web development', 'mobile apps', 'AI solutions', 'InfusionX'],
+    authors: [{ name: 'InfusionX' }],
+    creator: 'InfusionX',
+    metadataBase: new URL('https://infusionx.com'),
     openGraph: {
         type: 'website',
         locale: 'en_US',
-        url: 'https://your-domain.com',
-        title: 'Arfazrll | AI & Software Engineer',
-        description: 'A passionate developer building digital experiences that inspire.',
-        siteName: 'Portfolio',
+        url: 'https://infusionx.com',
+        title: 'InfusionX | Digital Agency',
+        description: 'Building Intelligent Digital Products That Drive Growth',
+        siteName: 'InfusionX',
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Arfazrll | AI & Software Engineer',
-        description: 'A passionate developer building digital experiences that inspire.',
-        creator: '@yourusername',
+        title: 'InfusionX | Digital Agency',
+        description: 'Building Intelligent Digital Products That Drive Growth',
+        creator: '@infusionx',
     },
     robots: {
         index: true,
@@ -67,8 +64,8 @@ export const metadata: Metadata = {
     },
     icons: {
         icon: [
-            { url: '/Arfazrll_light.svg', media: '(prefers-color-scheme: light)' },
-            { url: '/Arfazrll_dark.svg', media: '(prefers-color-scheme: dark)' },
+            { url: '/logo.svg', media: '(prefers-color-scheme: light)' },
+            { url: '/logo-dark.svg', media: '(prefers-color-scheme: dark)' },
         ],
     },
 };
@@ -87,6 +84,7 @@ import { ThemeAwareClickSpark } from '@/components/ui/ThemeAwareClickSpark';
 import { ConditionalNavigation } from '@/components/layout/ConditionalNavigation';
 import { ArcPreloaderWrapper } from '@/components/layout/ArcPreloaderWrapper';
 import { ChatBot } from '@/components/layout/ChatBot';
+import { GlobalEffects } from '@/components/effects/GlobalEffects';
 
 export default async function RootLayout({
     children,
@@ -97,8 +95,8 @@ export default async function RootLayout({
     const messages = await getMessages();
 
     return (
-        <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
-            <body className={`${inter.variable} ${jetbrainsMono.variable} ${playfair.variable} ${signature.variable} font-sans relative`}>
+        <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning className="dark">
+            <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans bg-black text-zinc-100 relative selection:bg-white/10 selection:text-white`}>
                 <ThemeProvider>
                     <I18nProvider locale={locale} messages={messages}>
                         <SmoothScrollProvider>
@@ -108,7 +106,8 @@ export default async function RootLayout({
                                         {children}
                                     </ConditionalNavigation>
                                 </ArcPreloaderWrapper>
-                                <ChatBot headless />
+                                <ChatBot />
+                                <GlobalEffects />
                             </ThemeAwareClickSpark>
                         </SmoothScrollProvider>
                     </I18nProvider>
