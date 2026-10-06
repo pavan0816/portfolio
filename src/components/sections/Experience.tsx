@@ -234,6 +234,7 @@ function TimelineItem({ m, isRight }: { m: typeof MILESTONES[0], isRight: boolea
 /* ─────────────────────────────────────────
    MAIN SECTION
 ──────────────────────────────────────────── */
+export default function Experience() {
     const timelineRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: timelineRef,
