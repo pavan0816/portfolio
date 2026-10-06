@@ -88,6 +88,7 @@ const StatCard = ({ value, label, icon, delay, isLowPowerMode }: StatCardProps) 
 export function ProjectStats({ isLowPowerMode }: { isLowPowerMode?: boolean }) {
     const metrics = calculateMetrics();
 
+    const stats = [
         {
             value: `${metrics.projects}+`,
             label: 'Projects Built',

@@ -422,7 +422,7 @@ export default function ContactPage() {
                                     )}
                                 </div>
                             </DeferredMount>
-                        </div>
+                        </motion.div>
 
                         {/* RIGHT COLUMN: Content Stack */}
                         <div className="col-span-1 lg:col-span-8 flex flex-col gap-16 relative z-10 pt-10 lg:pt-0">

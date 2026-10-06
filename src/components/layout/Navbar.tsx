@@ -202,7 +202,7 @@ export function Navbar() {
                                             onClick={(e) => handleNavClick(e, item.anchor)}
                                             className="text-4xl sm:text-5xl font-display font-medium tracking-tight transition-colors uppercase text-white/20 hover:text-white"
                                         >
-                                            {'label' in item ? item.label : t(item.key)}
+                                            {item.label}
                                         </a>
                                     </motion.div>
                                 </div>

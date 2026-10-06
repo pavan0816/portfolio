@@ -25,10 +25,7 @@
     --ring: 0 0% 100%;
     --radius: 0.5rem;
   }
-}
-
-@layer base {
-  * { @apply border-border; }
+  
   html { scroll-behavior: smooth; }
   body {
     @apply bg-black text-zinc-100 antialiased;

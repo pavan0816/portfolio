@@ -88,7 +88,7 @@ export default function HomePage() {
             >
                 {/* HERO */}
                 <div id="hero">
-                    <HeroVisual isExiting={isReadyToAnimate} />
+                    <HeroVisual />
                 </div>
 
                 <DeferredMount>
