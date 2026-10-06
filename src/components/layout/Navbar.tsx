@@ -11,12 +11,11 @@ import { cn } from '@/lib/utils';
 import { usePreloadState } from '@/components/ui/premium-page-transition';
 
 const NAV_ITEMS = [
-    { key: 'home', anchor: '#hero' },
-    { key: 'about-us', anchor: '#about-us', label: 'About' },
-    { key: 'services', anchor: '#projects' },
-    { key: 'experience', anchor: '#experience' },
-    { key: 'projects', anchor: '#projects' },
-    { key: 'contact', anchor: '#contact' },
+    { key: 'home', anchor: '#hero', label: 'HOME' },
+    { key: 'about', anchor: '#about-us', label: 'ABOUT' },
+    { key: 'services', anchor: '#projects', label: 'SERVICES' },
+    { key: 'experience', anchor: '#experience', label: 'EXPERIENCE' },
+    { key: 'projects', anchor: '#selected-work', label: 'PROJECTS' },
 ];
 
 function smoothScrollTo(anchor: string) {
@@ -123,16 +122,16 @@ export function Navbar() {
                         </a>
 
                         {/* DESKTOP NAV */}
-                        <div className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
-                            {NAV_ITEMS.filter(item => item.key !== 'contact').map((item) => (
+                        <div className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
+                            {NAV_ITEMS.map((item) => (
                                 <a
                                     key={item.key}
                                     href={item.anchor}
                                     onClick={(e) => handleNavClick(e, item.anchor)}
-                                    className="relative group overflow-hidden"
+                                    className="relative group py-2 px-1"
                                 >
-                                    <span className="relative z-10 text-xs tracking-[0.2em] font-medium uppercase transition-colors duration-500 text-white/40 group-hover:text-white">
-                                        {'label' in item ? item.label : t(item.key)}
+                                    <span className="relative z-10 text-[10px] tracking-[0.2em] font-medium uppercase transition-all duration-500 text-[#8B8F98] group-hover:text-[#F2F2F2]">
+                                        {item.label}
                                     </span>
                                 </a>
                             ))}
@@ -142,17 +141,17 @@ export function Navbar() {
                         <div className="hidden lg:flex items-center gap-6 z-[110]">
                             <button
                                 onClick={toggleLocale}
-                                className="text-xs tracking-[0.2em] font-medium uppercase text-white/40 hover:text-white transition-colors duration-500 flex items-center gap-2"
+                                className="text-[10px] tracking-[0.15em] font-medium uppercase text-[#8B8F98] hover:text-[#F2F2F2] transition-colors duration-500 flex items-center gap-2"
                             >
-                                <Globe className="w-3 h-3" />
-                                {currentLocale.toUpperCase()}
+                                <Globe className="w-4 h-4" />
+                                EN
                             </button>
                             <a
                                 href="#contact"
                                 onClick={(e) => handleNavClick(e, '#contact')}
-                                className="px-6 py-2.5 rounded-full border border-white/20 text-xs tracking-[0.2em] font-medium uppercase text-white hover:bg-white hover:text-black transition-all duration-500"
+                                className="px-6 py-2 rounded-full border border-[#1A1D22] text-[10px] tracking-[0.2em] font-medium uppercase text-[#F2F2F2] hover:border-[#F2F2F2] transition-all duration-500"
                             >
-                                {t('contact')}
+                                CONTACT
                             </a>
                         </div>
 

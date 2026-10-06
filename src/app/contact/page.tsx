@@ -303,34 +303,35 @@ export default function ContactPage() {
     const { isLowPowerMode } = usePerformance();
 
     const arcData = [
-        { order: 1, startLat: 37.7749, startLng: -122.4194, endLat: 51.5074, endLng: -0.1278, arcAlt: 0.3, color: '#3b82f6' },
-        { order: 2, startLat: 51.5074, startLng: -0.1278, endLat: 35.6762, endLng: 139.6503, arcAlt: 0.3, color: '#10b981' },
-        { order: 3, startLat: 35.6762, startLng: 139.6503, endLat: -33.8688, endLng: 151.2093, arcAlt: 0.3, color: '#8b5cf6' },
-        { order: 4, startLat: -33.8688, startLng: 151.2093, endLat: 1.3521, endLng: 103.8198, arcAlt: 0.3, color: '#3b82f6' },
-        { order: 5, startLat: 1.3521, startLng: 103.8198, endLat: 37.7749, endLng: -122.4194, arcAlt: 0.3, color: '#10b981' },
+        { order: 1, startLat: 37.7749, startLng: -122.4194, endLat: 51.5074, endLng: -0.1278, arcAlt: 0.3, color: '#3B82F6' },
+        { order: 2, startLat: 51.5074, startLng: -0.1278, endLat: 35.6762, endLng: 139.6503, arcAlt: 0.3, color: '#33404D' }, // Inactive line
+        { order: 3, startLat: 35.6762, startLng: 139.6503, endLat: -33.8688, endLng: 151.2093, arcAlt: 0.3, color: '#3B82F6' },
+        { order: 4, startLat: -33.8688, startLng: 151.2093, endLat: 1.3521, endLng: 103.8198, arcAlt: 0.3, color: '#22D3EE' }, // Important node cyan
+        { order: 5, startLat: 1.3521, startLng: 103.8198, endLat: 37.7749, endLng: -122.4194, arcAlt: 0.3, color: '#3B82F6' },
+        { order: 6, startLat: 37.7749, startLng: -122.4194, endLat: -23.5505, endLng: -46.6333, arcAlt: 0.3, color: '#33404D' }, // Inactive line
     ];
 
     const globeConfig = {
         pointSize: 4,
-        globeColor: "#0f172a",
+        globeColor: "#040506",
         showAtmosphere: true,
-        atmosphereColor: "#38bdf8",
+        atmosphereColor: "#17202A",
         atmosphereAltitude: 0.1,
-        emissive: "#0f172a",
+        emissive: "#040506",
         emissiveIntensity: 0.5,
         shininess: 0.9,
-        polygonColor: "rgba(255,255,255,0.7)",
-        ambientLight: "#38bdf8",
-        directionalLeftLight: "#ffffff",
-        directionalTopLight: "#ffffff",
-        pointLight: "#ffffff",
-        arcTime: 2000,
+        polygonColor: "#17202A",
+        ambientLight: "#3B82F6",
+        directionalLeftLight: "#17202A",
+        directionalTopLight: "#17202A",
+        pointLight: "#3B82F6",
+        arcTime: 4000,
         arcLength: 0.9,
         rings: 1,
         maxRings: 3,
         initialPosition: { lat: 22.3193, lng: 114.1694 },
         autoRotate: true,
-        autoRotateSpeed: 0.5,
+        autoRotateSpeed: 0.2,
     };
 
     const getSocialItem = (platform: string) => {
@@ -362,13 +363,14 @@ export default function ContactPage() {
     const headerOpacity = useTransform(showFAQ, [0, 0.4], [1, 0.6]);
     const headerScale = useTransform(showFAQ, [0, 0.4], [1, 0.98]);
     const headerFilter = useTransform(showFAQ, [0, 0.4], ["blur(0px)", "blur(2px)"]);
+    const globeY = useTransform(scrollYProgress, [0, 1], [0, 150]);
 
 
     return (
-        <div ref={containerRef} className="relative bg-background selection:bg-primary/20">
+        <div ref={containerRef} className="relative bg-[#040506] selection:bg-[#3B82F6]/20">
             {/* 2. HEADER & BACKGROUNDS */}
-            <div className="fixed inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none z-0" />
-            <div className="fixed inset-0 bg-background/60 backdrop-blur-[2px] pointer-events-none z-0" />
+            <div className="fixed inset-0 bg-[#040506] pointer-events-none z-0" />
+            <div className="fixed inset-0 bg-[#040506]/60 backdrop-blur-[2px] pointer-events-none z-0" />
             <DeferredMount>
                 <div className="fixed inset-0 pointer-events-none z-[5] overflow-hidden">
                     {!isLowPowerMode && <Meteors number={50} />}
@@ -403,12 +405,12 @@ export default function ContactPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
 
                         {/* LEFT COLUMN: Global Presence Globe */}
-                        <div className="col-span-1 lg:col-span-4 relative lg:sticky top-0 h-[400px] md:h-[500px] lg:h-[90vh] pointer-events-none z-20">
+                        <motion.div style={{ y: globeY }} className="col-span-1 lg:col-span-4 relative lg:sticky top-0 h-[400px] md:h-[500px] lg:h-[90vh] pointer-events-none z-20">
                             <DeferredMount fallback={<div className="w-full h-full flex items-center justify-center opacity-50"><Loader2 className="w-8 h-8 animate-spin" /></div>}>
                                 <div className="w-full h-full pointer-events-auto overflow-visible flex items-center justify-center">
                                     {!isLowPowerMode ? (
                                         <ErrorBoundary fallback={<div className="w-full h-full flex items-center justify-center opacity-50">Globe Unavailable</div>}>
-                                            <div className="w-full aspect-square relative mix-blend-screen overflow-hidden rounded-full">
+                                            <div className="w-full aspect-square relative overflow-hidden rounded-full opacity-80 mix-blend-screen">
                                                 <World globeConfig={globeConfig} data={arcData} />
                                             </div>
                                         </ErrorBoundary>

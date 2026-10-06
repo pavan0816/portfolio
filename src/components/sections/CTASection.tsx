@@ -168,10 +168,10 @@ export default function CTASection() {
                             <button 
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="group relative inline-flex items-center gap-3 bg-white/5 border border-white/10 text-white px-10 py-5 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-white/10 transition-all duration-300 disabled:opacity-70 disabled:hover:bg-white/5"
+                                className="group relative inline-flex items-center gap-3 bg-white text-black px-10 py-5 rounded-full font-bold uppercase tracking-widest text-sm hover:scale-[1.02] shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4)] transition-all duration-500 disabled:opacity-70"
                             >
                                 {isSubmitting ? "Sending..." : "Send Message"}
-                                {!isSubmitting && <Send className="w-4 h-4 text-zinc-400 group-hover:text-white group-hover:translate-x-1 transition-all" />}
+                                {!isSubmitting && <Send className="w-4 h-4 text-black group-hover:translate-x-1 transition-all" />}
                             </button>
                         </div>
                     </form>

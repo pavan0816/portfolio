@@ -49,7 +49,7 @@ const founders = [
 
 export default function AboutSection() {
     return (
-        <section id="about" className="relative bg-[#000000] py-20 z-20 overflow-hidden">
+        <section id="about" className="relative bg-[#050505] py-20 z-20 overflow-hidden">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                 
 
@@ -72,35 +72,38 @@ export default function AboutSection() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-50px" }}
                                 transition={{ duration: 1, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                                className="group relative bg-[#050505] border border-white/5 p-8 md:p-10 rounded-2xl hover:bg-[#0A0A0A] hover:border-white/10 transition-all duration-700"
+                                className="group relative bg-[#0A0D11] border border-[#1A2028] p-8 md:p-10 rounded-2xl hover:border-[#3B82F6] hover:-translate-y-[3px] hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-500"
                             >
                                 <div className="flex flex-col sm:flex-row items-start gap-6 sm:gap-8 mb-8">
-                                    <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-700">
-                                        <span className="text-xl font-display font-semibold text-white/80">{founder.initial}</span>
+                                    <div className="relative w-16 h-16 rounded-full bg-[#050505] border border-[#1A2028] group-hover:border-[#3B82F6]/50 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(96,165,250,0.15)] transition-all duration-500 overflow-hidden">
+                                        {/* Subtle blue rim/light effect around the portrait container */}
+                                        <div className="absolute inset-0 rounded-full border border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                        <div className="absolute inset-0 bg-[#3B82F6]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                        <span className="relative z-10 text-xl font-display font-semibold text-[#8B95A3] group-hover:text-[#F2F4F7] transition-colors duration-500">{founder.initial}</span>
                                     </div>
                                     <div>
-                                        <h4 className="text-2xl font-display font-medium text-white mb-1">{founder.name}</h4>
-                                        <p className="text-xs font-semibold tracking-widest text-zinc-500 uppercase">{founder.role}</p>
+                                        <h4 className="text-2xl font-display font-medium text-[#F2F4F7] group-hover:text-white transition-colors duration-500 mb-1">{founder.name}</h4>
+                                        <p className="text-xs font-semibold tracking-widest text-[#7F8996] uppercase">{founder.role}</p>
                                     </div>
                                 </div>
                                 
-                                <p className="text-zinc-400 leading-relaxed font-light mb-8 max-w-sm">
+                                <p className="text-[#8B95A3] leading-relaxed font-light mb-8 max-w-sm">
                                     {founder.description}
                                 </p>
                                 
                                 <div className="flex flex-wrap gap-2 mt-auto pb-8">
                                     {founder.expertise.map(exp => (
-                                        <span key={exp} className="px-3 py-1 rounded-full bg-white/5 border border-white/5 text-xs text-zinc-400 font-medium">
+                                        <span key={exp} className="px-3 py-1 rounded-full bg-[#050505] border border-[#1A2028] text-xs text-[#7F8996] font-medium group-hover:border-[#3B82F6]/30 group-hover:text-[#F2F4F7] transition-colors duration-500">
                                             {exp}
                                         </span>
                                     ))}
                                 </div>
 
-                                <div className="absolute top-8 right-8 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                                    <Link href={founder.linkedin} className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all duration-500">
+                                <div className="absolute top-8 right-8 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <Link href={founder.linkedin} className="w-10 h-10 rounded-full border border-[#1A2028] flex items-center justify-center text-[#7F8996] hover:text-[#60A5FA] hover:border-[#3B82F6]/50 bg-[#050505] transition-all duration-500">
                                         <Linkedin className="w-4 h-4" />
                                     </Link>
-                                    <Link href={founder.email} className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all duration-500">
+                                    <Link href={founder.email} className="w-10 h-10 rounded-full border border-[#1A2028] flex items-center justify-center text-[#7F8996] hover:text-[#60A5FA] hover:border-[#3B82F6]/50 bg-[#050505] transition-all duration-500">
                                         <Mail className="w-4 h-4" />
                                     </Link>
                                 </div>

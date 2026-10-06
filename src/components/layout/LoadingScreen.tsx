@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Constellation } from '@/components/effects/Constellation';
 
 interface LoadingScreenProps {
     onComplete?: () => void;
@@ -84,49 +85,15 @@ export function LoadingScreen({ onComplete, onExitStart, duration }: LoadingScre
                     }}
                     className="fixed inset-0 z-[1000] flex flex-col items-center justify-center bg-background overflow-hidden will-change-transform"
                 >
-                    {/* Animated mesh gradient background */}
+                    {/* Dark Constellation Background */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-0 z-0 bg-[#3b4c53] overflow-hidden"
+                        className="absolute inset-0 z-0 bg-black overflow-hidden"
                     >
-                        {/* Morphing gradient blobs */}
-                        <motion.div
-                            className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[#528c89] blur-[120px] mix-blend-screen opacity-70"
-                            animate={{
-                                x: [0, 50, -30, 0],
-                                y: [0, -30, 20, 0],
-                                scale: [1, 1.2, 0.9, 1],
-                            }}
-                            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                        <motion.div
-                            className="absolute top-[10%] right-[-20%] w-[70%] h-[70%] rounded-full bg-[#415e7a] blur-[130px] mix-blend-screen opacity-80"
-                            animate={{
-                                x: [0, -40, 30, 0],
-                                y: [0, 20, -40, 0],
-                                scale: [1, 0.9, 1.15, 1],
-                            }}
-                            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                        <motion.div
-                            className="absolute bottom-[-30%] right-[10%] w-[80%] h-[80%] rounded-full bg-[#8c5a35] blur-[140px] mix-blend-screen opacity-70"
-                            animate={{
-                                x: [0, 30, -20, 0],
-                                y: [0, -50, 30, 0],
-                                scale: [1, 1.1, 0.95, 1],
-                            }}
-                            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                        <motion.div
-                            className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#2a454b] blur-[100px] mix-blend-screen opacity-60"
-                            animate={{
-                                x: [0, -20, 40, 0],
-                                y: [0, 30, -20, 0],
-                            }}
-                            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-                        />
+                        <Constellation />
+                        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)`, backgroundSize: '100px 100px' }} />
                     </motion.div>
 
                     {/* Content */}
@@ -146,16 +113,15 @@ export function LoadingScreen({ onComplete, onExitStart, duration }: LoadingScre
                             initial="hidden"
                             animate="visible"
                             onAnimationComplete={handleAnimationComplete}
-                            transition={{ staggerChildren: 0.4, delayChildren: 0.3 }}
-                            className="flex text-7xl sm:text-8xl md:text-[8rem] lg:text-[10rem] font-[family-name:var(--font-signature)] tracking-normal font-normal lowercase will-change-transform drop-shadow-lg pr-4 py-4"
+                            transition={{ staggerChildren: 0.15, delayChildren: 0.3 }}
+                            className="flex text-6xl sm:text-8xl md:text-[8rem] lg:text-[10rem] font-display font-black tracking-tight uppercase will-change-transform drop-shadow-2xl pr-4 py-4 text-gradient-premium"
                             style={{ perspective: "600px" }}
                         >
-                            {text.split('').map((char, index) => (
+                            {"INFUSIONX".split('').map((char, index) => (
                                 <motion.span
                                     key={index}
                                     variants={letterVariants}
                                     style={{
-                                        color: getLetterColor(index),
                                         display: 'inline-block',
                                         transformOrigin: 'center bottom',
                                     }}

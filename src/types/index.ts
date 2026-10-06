@@ -12,6 +12,7 @@ export interface Project {
     status: 'ongoing' | 'completed' | 'planned';
     demoUrl?: string;
     repoUrl?: string;
+    allowIframe?: boolean;
     startDate: string;
     endDate?: string;
     highlights?: string[];

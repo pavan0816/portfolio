@@ -13,7 +13,10 @@ import { HeroVisual } from "@/components/sections/HeroVisual";
 import AboutUs from "@/components/sections/AboutUs";
 import AboutSection from "@/components/sections/AboutSection";
 import ProjectsSection from "@/components/sections/ProjectsSection";
-import Experience from "@/components/sections/Experience";
+import SelectedWork from "@/components/sections/SelectedWork";
+import HowWeWork from "@/components/sections/HowWeWork";
+import WhyInfusionX from "@/components/sections/WhyInfusionX";
+import WhatClientsSay from "@/components/sections/WhatClientsSay";
 import CTASection from "@/components/sections/CTASection";
 
 if (typeof window !== 'undefined') {
@@ -95,11 +98,20 @@ export default function HomePage() {
                     {/* PROJECTS / WORK (Services) */}
                     <ProjectsSection />
 
-                    {/* EXPERIENCE / MILESTONES */}
-                    <Experience />
+                    {/* ACTUAL PROJECTS / SELECTED WORK */}
+                    <SelectedWork />
+
+                    {/* HOW WE WORK */}
+                    <HowWeWork />
+
+                    {/* WHY INFUSIONX */}
+                    <WhyInfusionX />
 
                     {/* LEADERSHIP / TEAM */}
                     <AboutSection />
+
+                    {/* WHAT CLIENTS SAY */}
+                    <WhatClientsSay />
 
                     {/* CONTACT / CTA */}
                     <CTASection />
