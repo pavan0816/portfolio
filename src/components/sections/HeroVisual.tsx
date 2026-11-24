@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -61,8 +61,8 @@ export function HeroVisual() {
 
     const handleMouseMove = (e: React.MouseEvent) => {
         const { innerWidth, innerHeight } = window;
-        const x = (e.clientX / innerWidth - 0.5) * 100; // -50 to 50
-        const y = (e.clientY / innerHeight - 0.5) * 100; // -50 to 50
+        const x = (e.clientX / innerWidth - 0.5) * 100;
+        const y = (e.clientY / innerHeight - 0.5) * 100;
         mouseX.set(x);
         mouseY.set(y);
     };
@@ -132,7 +132,7 @@ export function HeroVisual() {
                 {/* Eyebrow */}
                 <motion.div variants={eyebrowVariants} initial="hidden" animate="visible" className="mb-6">
                     <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#8B95A3]">
-                        • DIGITAL ENGINEERING & DESIGN •
+                        DIGITAL ENGINEERING & AI
                     </span>
                 </motion.div>
 
@@ -145,7 +145,7 @@ export function HeroVisual() {
                         animate="visible" 
                         className="hero-title text-gradient-premium tracking-tight relative z-10"
                     >
-                        INFUSIONX
+                        BUILD WHAT&apos;S<br />NEXT.
                     </motion.h1>
                     {/* Soft blurred blue glow behind the right side */}
                     <motion.div 
@@ -160,15 +160,15 @@ export function HeroVisual() {
                 {/* Subtitle */}
                 <motion.div custom={2} variants={textRevealVariants} initial="hidden" animate="visible" className="overflow-hidden mb-12">
                     <p className="font-sans font-light text-[#8B95A3] leading-[1.65] text-lg max-w-2xl mx-auto">
-                        We are a premium digital agency engineering high-performance <br className="hidden sm:block" />
-                        software and cinematic visual experiences.
+                        We design and engineer high-performance digital products, <br className="hidden sm:block" />
+                        AI-powered solutions and scalable software that move businesses forward.
                     </p>
                 </motion.div>
 
                 {/* CTAs */}
                 <motion.div variants={ctaVariants} initial="hidden" animate="visible" className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full relative z-20">
-                    <MagneticButton href="#projects" primary>
-                        VIEW OUR WORK
+                    <MagneticButton href="#selected-work" primary>
+                        EXPLORE OUR WORK
                     </MagneticButton>
                     <MagneticButton href="#contact">
                         START A PROJECT
@@ -176,7 +176,7 @@ export function HeroVisual() {
                 </motion.div>
             </motion.div>
 
-            {/* Scroll Indicator (Phase 8) */}
+            {/* Scroll Indicator */}
             <motion.div 
                 variants={scrollLineVariants}
                 initial="hidden"

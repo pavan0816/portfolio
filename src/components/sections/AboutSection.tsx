@@ -45,20 +45,21 @@ const founders = [
     }
 ];
 
-
-
 export default function AboutSection() {
     return (
         <section id="about" className="relative bg-[#050505] py-20 z-20 overflow-hidden">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-                
-
-
                 {/* Founders Grid */}
                 <CinematicSection parallaxOffset={30} className="space-y-16">
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-white/10 pb-6 gap-6">
-                        <h3 className="text-3xl md:text-4xl font-display font-medium tracking-[-0.02em] text-white">The Leadership</h3>
-                        <Link href="#contact" className="group flex items-center gap-2 text-sm font-semibold tracking-widest uppercase text-white/60 hover:text-white transition-colors duration-500">
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-[#1A2028] pb-6 gap-6">
+                        <div>
+                            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#1A2028] bg-transparent text-[#858F9C] text-[10px] font-bold tracking-[0.3em] uppercase mb-4">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] inline-block" />
+                                Our Team
+                            </span>
+                            <h3 className="text-3xl md:text-4xl font-display font-medium tracking-[-0.02em] text-[#F2F4F7]">The Leadership</h3>
+                        </div>
+                        <Link href="#contact" className="group flex items-center gap-2 text-sm font-semibold tracking-widest uppercase text-[#858F9C] hover:text-[#F2F4F7] transition-colors duration-500">
                             Work With Us
                             <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-500" />
                         </Link>
@@ -75,11 +76,10 @@ export default function AboutSection() {
                                 className="group relative bg-[#0A0D11] border border-[#1A2028] p-8 md:p-10 rounded-2xl hover:border-[#3B82F6] hover:-translate-y-[3px] hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-500"
                             >
                                 <div className="flex flex-col sm:flex-row items-start gap-6 sm:gap-8 mb-8">
-                                    <div className="relative w-16 h-16 rounded-full bg-[#050505] border border-[#1A2028] group-hover:border-[#3B82F6]/50 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(96,165,250,0.15)] transition-all duration-500 overflow-hidden">
-                                        {/* Subtle blue rim/light effect around the portrait container */}
-                                        <div className="absolute inset-0 rounded-full border border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                        <div className="absolute inset-0 bg-[#3B82F6]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                        <span className="relative z-10 text-xl font-display font-semibold text-[#8B95A3] group-hover:text-[#F2F4F7] transition-colors duration-500">{founder.initial}</span>
+                                    {/* Avatar */}
+                                    <div className="relative w-20 h-20 rounded-full bg-[#050505] border-2 border-[#1A2028] group-hover:border-[#3B82F6]/50 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(96,165,250,0.15)] transition-all duration-500 overflow-hidden">
+                                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#3B82F6]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                        <span className="relative z-10 text-2xl font-display font-semibold text-[#8B95A3] group-hover:text-[#F2F4F7] transition-colors duration-500">{founder.initial}</span>
                                     </div>
                                     <div>
                                         <h4 className="text-2xl font-display font-medium text-[#F2F4F7] group-hover:text-white transition-colors duration-500 mb-1">{founder.name}</h4>
@@ -91,7 +91,7 @@ export default function AboutSection() {
                                     {founder.description}
                                 </p>
                                 
-                                <div className="flex flex-wrap gap-2 mt-auto pb-8">
+                                <div className="flex flex-wrap gap-2 mt-auto pb-6">
                                     {founder.expertise.map(exp => (
                                         <span key={exp} className="px-3 py-1 rounded-full bg-[#050505] border border-[#1A2028] text-xs text-[#7F8996] font-medium group-hover:border-[#3B82F6]/30 group-hover:text-[#F2F4F7] transition-colors duration-500">
                                             {exp}
@@ -99,12 +99,13 @@ export default function AboutSection() {
                                     ))}
                                 </div>
 
-                                <div className="absolute top-8 right-8 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                    <Link href={founder.linkedin} className="w-10 h-10 rounded-full border border-[#1A2028] flex items-center justify-center text-[#7F8996] hover:text-[#60A5FA] hover:border-[#3B82F6]/50 bg-[#050505] transition-all duration-500">
-                                        <Linkedin className="w-4 h-4" />
+                                {/* Social links — always visible */}
+                                <div className="flex gap-3 mt-2">
+                                    <Link href={founder.linkedin} className="w-9 h-9 rounded-full border border-[#1A2028] flex items-center justify-center text-[#7F8996] opacity-60 hover:opacity-100 hover:text-[#60A5FA] hover:border-[#3B82F6]/50 bg-[#050505] transition-all duration-500">
+                                        <Linkedin className="w-3.5 h-3.5" />
                                     </Link>
-                                    <Link href={founder.email} className="w-10 h-10 rounded-full border border-[#1A2028] flex items-center justify-center text-[#7F8996] hover:text-[#60A5FA] hover:border-[#3B82F6]/50 bg-[#050505] transition-all duration-500">
-                                        <Mail className="w-4 h-4" />
+                                    <Link href={founder.email} className="w-9 h-9 rounded-full border border-[#1A2028] flex items-center justify-center text-[#7F8996] opacity-60 hover:opacity-100 hover:text-[#60A5FA] hover:border-[#3B82F6]/50 bg-[#050505] transition-all duration-500">
+                                        <Mail className="w-3.5 h-3.5" />
                                     </Link>
                                 </div>
                             </motion.div>

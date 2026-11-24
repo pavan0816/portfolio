@@ -18,6 +18,8 @@ import HowWeWork from "@/components/sections/HowWeWork";
 import WhyInfusionX from "@/components/sections/WhyInfusionX";
 import WhatClientsSay from "@/components/sections/WhatClientsSay";
 import CTASection from "@/components/sections/CTASection";
+import Experience from "@/components/sections/Experience";
+import FAQSection from "@/components/sections/FAQSection";
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
@@ -107,11 +109,17 @@ export default function HomePage() {
                     {/* WHY INFUSIONX */}
                     <WhyInfusionX />
 
+                    {/* EXPERIENCE / TRACK RECORD & TIMELINE */}
+                    <Experience />
+
                     {/* LEADERSHIP / TEAM */}
                     <AboutSection />
 
                     {/* WHAT CLIENTS SAY */}
                     <WhatClientsSay />
+
+                    {/* FAQ ACCORDION */}
+                    <FAQSection />
 
                     {/* CONTACT / CTA */}
                     <CTASection />

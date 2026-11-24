@@ -75,7 +75,7 @@ const TICKER_ITEMS = [
 function Ticker() {
     const repeated = [...TICKER_ITEMS, ...TICKER_ITEMS];
     return (
-        <div className="relative overflow-hidden py-5 border-y border-white/5">
+        <div className="relative overflow-hidden py-5 border-y border-[#1A2028]">
             <motion.div
                 className="flex gap-12 whitespace-nowrap"
                 animate={{ x: ["0%", "-50%"] }}
@@ -84,10 +84,10 @@ function Ticker() {
                 {repeated.map((item, i) => (
                     <span
                         key={i}
-                        className="text-xs font-semibold tracking-[0.3em] uppercase text-white/20 flex items-center gap-6"
+                        className="text-xs font-semibold tracking-[0.3em] uppercase text-[#F2F4F7]/20 flex items-center gap-6"
                     >
                         {item}
-                        <span className="inline-block w-1 h-1 rounded-full bg-white/20" />
+                        <span className="inline-block w-1 h-1 rounded-full bg-[#F2F4F7]/20" />
                     </span>
                 ))}
             </motion.div>
@@ -102,7 +102,7 @@ export default function AboutUs() {
     return (
         <section
             id="about-us"
-            className="relative bg-[#050505] overflow-hidden py-24"
+            className="relative bg-[#050505] overflow-hidden py-20"
         >
             {/* Subtle background gradient orb */}
             <motion.div
@@ -119,7 +119,7 @@ export default function AboutUs() {
 
             {/* ── SECTION HEADER ── */}
             <div className="max-w-[1400px] mx-auto px-6 md:px-12 relative z-10">
-                <FadeUp className="mb-12">
+                <FadeUp className="mb-10">
                     <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8 border-b border-[#171D24] pb-8">
                         <div>
                             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#171D24] bg-transparent text-[#7D8794] text-[10px] font-bold tracking-[0.3em] uppercase mb-6">
@@ -143,7 +143,7 @@ export default function AboutUs() {
 
                 {/* ── OPENING STATEMENT ── */}
                 <FadeUp delay={0.2}>
-                    <p className="text-2xl md:text-3xl font-light text-[#AAB3BF] leading-[1.4] max-w-4xl mb-14 tracking-[-0.01em]">
+                    <p className="text-2xl md:text-3xl font-light text-[#AAB3BF] leading-[1.4] max-w-4xl mb-10 tracking-[-0.01em]">
                         InfusionX is a{" "}
                         <motion.em 
                             initial={{ textShadow: "0 0 0px rgba(59,130,246,0)" }}
@@ -159,7 +159,7 @@ export default function AboutUs() {
                 </FadeUp>
 
                 {/* ── PILLARS GRID ── */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-px bg-[#171D24] rounded-2xl overflow-hidden mb-14 relative z-10">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-px bg-[#171D24] rounded-2xl overflow-hidden mb-12 relative z-10">
                     {PILLARS.map((pillar, i) => {
                         const Icon = pillar.icon;
                         return (
@@ -199,7 +199,7 @@ export default function AboutUs() {
             <Ticker />
 
             {/* ── BOTTOM TAGLINE ── */}
-            <div className="max-w-[1400px] mx-auto px-6 md:px-12 mt-12 relative z-10">
+            <div className="max-w-[1400px] mx-auto px-6 md:px-12 mt-10 relative z-10">
                 <FadeUp delay={0.4}>
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-10">
                         <p className="text-[#7D8794] text-sm font-light leading-relaxed max-w-sm">

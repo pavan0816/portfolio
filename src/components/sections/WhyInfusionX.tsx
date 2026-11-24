@@ -72,27 +72,20 @@ export default function WhyInfusionX() {
             const cardsWrapper = rightCardsWrapperRef.current;
             if (!section || !cardsWrapper) return;
 
-            // Give the section enough height to scroll through all the cards
-            // 300vh allows a nice paced scroll distance.
             gsap.set(section, { height: "300vh" });
 
-            // Create scrub timeline tied to the section scroll progress
-            // Translate the cards wrapper upwards
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: section,
-                    start: "top top", // When section hits top of viewport
-                    end: "bottom bottom", // When bottom of 300vh hits bottom of viewport
-                    scrub: 1, // Smooth interpolated physical scrubbing
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1,
                 }
             });
 
-            // We calculate how far the cards need to travel so the last card is fully visible at the end
-            // Usually, this is the total height of the cards minus the viewport height.
             const distanceToScroll = () => {
                 const wrapperHeight = cardsWrapper.scrollHeight;
                 const windowHeight = window.innerHeight;
-                // Add some padding to ensure it scrolls fully out or rests nicely
                 const offset = Math.max(0, wrapperHeight - windowHeight + 200);
                 return -offset;
             };
@@ -115,7 +108,7 @@ export default function WhyInfusionX() {
 
     return (
         <section ref={sectionRef} id="why-infusionx" className="relative bg-[#050505] border-t border-[#1A2028]">
-            {/* The Sticky Stage: Keeps both columns in view while the inner right translates */}
+            {/* The Sticky Stage */}
             <div className="lg:sticky lg:top-0 lg:h-screen w-full py-24 md:py-32 lg:py-0 overflow-hidden flex items-center">
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12 relative z-10 w-full h-full flex flex-col lg:flex-row gap-12 lg:gap-24 items-center">
                     
@@ -137,23 +130,21 @@ export default function WhyInfusionX() {
                     </div>
 
                     {/* ── RIGHT COLUMN (Cards) - SCROLLS UP ── */}
-                    {/* On Desktop, this container takes the other half, but the inner div translates up */}
                     <div className="lg:w-1/2 w-full relative z-10 lg:h-screen flex items-center lg:items-start">
-                        {/* The inner wrapper that physically translates upward on scroll */}
                         <div ref={rightCardsWrapperRef} className="flex flex-col gap-6 md:gap-8 w-full lg:pt-32 lg:pb-32">
                             {CARDS.map((card, i) => (
                                 <FadeUp key={card.num} delay={0.15 * i} className="group cursor-pointer">
                                     <div className="relative">
                                         {/* Active card glow behind the card */}
                                         <div 
-                                            className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-700 blur-[60px] pointer-events-none" 
+                                            className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-700 blur-[60px] pointer-events-none" 
                                             style={{ backgroundColor: "#3B82F6" }} 
                                         />
                                         
                                         <div className="relative p-6 md:p-12 rounded-[2rem] border border-[#1A2028] bg-[#0B0F14] overflow-hidden transition-all duration-500 group-hover:border-[#3B82F6] group-hover:bg-[#0B1626]">
                                             {/* Number & Arrow row */}
                                             <div className="flex justify-between items-start mb-8 md:mb-16">
-                                                <div className="text-4xl md:text-6xl font-display font-bold text-[#1A2028] transition-colors duration-500 group-hover:text-[#60A5FA]">
+                                                <div className="text-4xl md:text-6xl font-display font-bold text-[#252C35] transition-colors duration-500 group-hover:text-[#3B82F6]">
                                                     {card.num}
                                                 </div>
                                                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-[#1A2028] flex items-center justify-center bg-transparent transition-all duration-500 group-hover:border-[#3B82F6] group-hover:bg-[#3B82F6]/10">

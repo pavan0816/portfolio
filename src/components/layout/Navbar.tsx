@@ -39,6 +39,7 @@ export function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [lastScrollY, setLastScrollY] = useState(0);
     const [currentLocale, setCurrentLocale] = useState('en');
+    const [activeSection, setActiveSection] = useState<string>('hero');
     
     const { isPreloading: isPreloadActive } = usePreloadState();
     const isDark = resolvedTheme === 'dark' || true;
@@ -56,6 +57,36 @@ export function Navbar() {
         }
         return () => { document.body.style.overflow = ''; };
     }, [isMenuOpen]);
+
+    // Active section intersection observer
+    useEffect(() => {
+        if (pathname !== '/') return;
+
+        const sectionIds = ['hero', 'about-us', 'projects', 'experience', 'selected-work', 'contact'];
+        const sectionElements = sectionIds
+            .map(id => document.getElementById(id))
+            .filter((el): el is HTMLElement => el !== null);
+
+        if (sectionElements.length === 0) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setActiveSection(entry.target.id);
+                    }
+                });
+            },
+            {
+                rootMargin: '-20% 0px -50% 0px',
+                threshold: 0.1,
+            }
+        );
+
+        sectionElements.forEach((el) => observer.observe(el));
+
+        return () => observer.disconnect();
+    }, [pathname]);
 
     useMotionValueEvent(scrollY, 'change', (latest) => {
         if (isMenuOpen) return;
@@ -82,9 +113,9 @@ export function Navbar() {
     const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, anchor: string) => {
         e.preventDefault();
         closeMenu();
-        // If we're on the homepage, smooth-scroll. Otherwise, navigate to / first.
         if (pathname === '/') {
             smoothScrollTo(anchor);
+            setActiveSection(anchor.replace('#', ''));
         } else {
             window.location.href = '/' + anchor;
         }
@@ -103,7 +134,7 @@ export function Navbar() {
                         className={cn(
                             'flex items-center justify-between transition-all duration-700',
                             isScrolled 
-                              ? 'bg-[#020202]/80 backdrop-blur-md border border-white/5 rounded-full px-8 py-4 shadow-[0_4px_30px_rgba(0,0,0,0.8)]' 
+                              ? 'bg-[#050505]/85 backdrop-blur-md border border-[#1A2028] rounded-full px-8 py-4 shadow-[0_4px_30px_rgba(0,0,0,0.8)]' 
                               : 'py-2'
                         )}
                         layout
@@ -123,25 +154,39 @@ export function Navbar() {
 
                         {/* DESKTOP NAV */}
                         <div className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
-                            {NAV_ITEMS.map((item) => (
-                                <a
-                                    key={item.key}
-                                    href={item.anchor}
-                                    onClick={(e) => handleNavClick(e, item.anchor)}
-                                    className="relative group py-2 px-1"
-                                >
-                                    <span className="relative z-10 text-[10px] tracking-[0.2em] font-medium uppercase transition-all duration-500 text-[#8B8F98] group-hover:text-[#F2F2F2]">
-                                        {item.label}
-                                    </span>
-                                </a>
-                            ))}
+                            {NAV_ITEMS.map((item) => {
+                                const sectionId = item.anchor.replace('#', '');
+                                const isActive = activeSection === sectionId;
+                                return (
+                                    <a
+                                        key={item.key}
+                                        href={item.anchor}
+                                        onClick={(e) => handleNavClick(e, item.anchor)}
+                                        className="relative group py-2 px-1"
+                                    >
+                                        <span className={cn(
+                                            "relative z-10 text-[10px] tracking-[0.2em] font-medium uppercase transition-colors duration-300",
+                                            isActive ? "text-[#F2F4F7]" : "text-[#8B8F98] group-hover:text-[#F2F4F7]"
+                                        )}>
+                                            {item.label}
+                                        </span>
+                                        {isActive && (
+                                            <motion.div
+                                                layoutId="navbarActiveIndicator"
+                                                className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#3B82F6] rounded-full shadow-[0_0_8px_#3B82F6]"
+                                                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                                            />
+                                        )}
+                                    </a>
+                                );
+                            })}
                         </div>
 
                         {/* DESKTOP CONTROLS */}
                         <div className="hidden lg:flex items-center gap-6 z-[110]">
                             <button
                                 onClick={toggleLocale}
-                                className="text-[10px] tracking-[0.15em] font-medium uppercase text-[#8B8F98] hover:text-[#F2F2F2] transition-colors duration-500 flex items-center gap-2"
+                                className="text-[10px] tracking-[0.15em] font-medium uppercase text-[#8B8F98] hover:text-[#F2F4F7] transition-colors duration-500 flex items-center gap-2"
                             >
                                 <Globe className="w-4 h-4" />
                                 EN
@@ -149,7 +194,12 @@ export function Navbar() {
                             <a
                                 href="#contact"
                                 onClick={(e) => handleNavClick(e, '#contact')}
-                                className="px-6 py-2 rounded-full border border-[#1A1D22] text-[10px] tracking-[0.2em] font-medium uppercase text-[#F2F2F2] hover:border-[#F2F2F2] transition-all duration-500"
+                                className={cn(
+                                    "px-6 py-2 rounded-full border text-[10px] tracking-[0.2em] font-medium uppercase transition-all duration-500",
+                                    activeSection === 'contact'
+                                        ? "border-[#3B82F6] text-[#3B82F6] shadow-[0_0_15px_rgba(59,130,246,0.25)]"
+                                        : "border-[#1A2028] text-[#F2F4F7] hover:border-[#3B82F6]/60 hover:text-white"
+                                )}
                             >
                                 CONTACT
                             </a>
@@ -158,6 +208,7 @@ export function Navbar() {
                         {/* MOBILE TOGGLE */}
                         <button
                             onClick={toggleMenu}
+                            aria-label="Toggle navigation menu"
                             className="p-3 -mr-3 rounded-full text-white/70 hover:text-white transition-colors lg:hidden z-[110]"
                         >
                             <AnimatePresence mode="wait">
@@ -184,29 +235,59 @@ export function Navbar() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, transition: { delay: 0.2 } }}
                         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                        className="fixed inset-0 z-[90] lg:hidden bg-black flex flex-col justify-center items-center"
+                        className="fixed inset-0 z-[90] lg:hidden bg-[#050505] flex flex-col justify-center items-center"
                     >
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] bg-white/5 rounded-full blur-[100px] pointer-events-none" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] bg-[#3B82F6]/5 rounded-full blur-[100px] pointer-events-none" />
                         
                         <nav className="flex flex-col items-center gap-8 w-full px-8 relative z-10">
-                            {NAV_ITEMS.map((item, i) => (
-                                <div key={item.key} className="overflow-hidden">
-                                    <motion.div
-                                        initial={{ y: "100%", opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        exit={{ y: "-100%", opacity: 0 }}
-                                        transition={{ duration: 0.8, delay: 0.1 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                                    >
-                                        <a
-                                            href={item.anchor}
-                                            onClick={(e) => handleNavClick(e, item.anchor)}
-                                            className="text-4xl sm:text-5xl font-display font-medium tracking-tight transition-colors uppercase text-white/20 hover:text-white"
+                            {NAV_ITEMS.map((item, i) => {
+                                const sectionId = item.anchor.replace('#', '');
+                                const isActive = activeSection === sectionId;
+                                return (
+                                    <div key={item.key} className="overflow-hidden">
+                                        <motion.div
+                                            initial={{ y: "100%", opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            exit={{ y: "-100%", opacity: 0 }}
+                                            transition={{ duration: 0.8, delay: 0.1 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
                                         >
-                                            {item.label}
-                                        </a>
-                                    </motion.div>
-                                </div>
-                            ))}
+                                            <a
+                                                href={item.anchor}
+                                                onClick={(e) => handleNavClick(e, item.anchor)}
+                                                className={cn(
+                                                    "text-4xl sm:text-5xl font-display font-medium tracking-tight transition-colors uppercase",
+                                                    isActive ? "text-[#3B82F6]" : "text-white/30 hover:text-white"
+                                                )}
+                                            >
+                                                {item.label}
+                                            </a>
+                                        </motion.div>
+                                    </div>
+                                );
+                            })}
+                            
+                            {/* Contact in Mobile Menu */}
+                            <div className="overflow-hidden pt-4">
+                                <motion.div
+                                    initial={{ y: "100%", opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: "-100%", opacity: 0 }}
+                                    transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                                >
+                                    <a
+                                        href="#contact"
+                                        onClick={(e) => handleNavClick(e, '#contact')}
+                                        className={cn(
+                                            "text-2xl font-display font-medium tracking-tight uppercase px-6 py-2.5 rounded-full border",
+                                            activeSection === 'contact'
+                                                ? "border-[#3B82F6] text-[#3B82F6] bg-[#3B82F6]/10"
+                                                : "border-[#1A2028] text-[#8B8F98] hover:text-white"
+                                        )}
+                                    >
+                                        START A PROJECT
+                                    </a>
+                                </motion.div>
+                            </div>
                         </nav>
                         
                         <motion.div

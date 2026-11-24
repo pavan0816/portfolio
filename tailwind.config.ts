@@ -10,40 +10,40 @@ const config: Config = {
     theme: {
         extend: {
             colors: {
-                background: '#000000', // Pure black
-                foreground: '#F5F5F5', // Soft white
+                background: '#050505',
+                foreground: '#F2F4F7',
                 card: {
-                    DEFAULT: '#0A0A0A', // Deep charcoal
-                    foreground: '#F5F5F5'
+                    DEFAULT: '#0D1117',
+                    foreground: '#F2F4F7'
                 },
                 primary: {
-                    DEFAULT: '#FFFFFF', // Pure white for primary actions
-                    foreground: '#000000' // Black text on white
+                    DEFAULT: '#F2F4F7',
+                    foreground: '#000000'
                 },
                 secondary: {
-                    DEFAULT: '#111111',
-                    foreground: '#A1A1AA'
+                    DEFAULT: '#0A0D12',
+                    foreground: '#9CA3AF'
                 },
                 muted: {
-                    DEFAULT: '#111111',
-                    foreground: '#71717A'
+                    DEFAULT: '#0A0D12',
+                    foreground: '#6B7280'
                 },
                 accent: {
-                    DEFAULT: '#0EA5E9', // Highly controlled cyan accent
+                    DEFAULT: '#3B82F6', // Electric blue accent
                     foreground: '#FFFFFF'
                 },
-                border: '#1F1F1F',
-                ring: '#FFFFFF',
+                border: '#1A2028',
+                ring: '#3B82F6',
                 // Premium specific colors
                 surface: {
-                    50: '#0A0A0A',
-                    100: '#111111',
-                    200: '#1A1A1A',
+                    50: '#050505',
+                    100: '#0A0D12',
+                    200: '#1A2028',
                 },
                 glow: {
-                    primary: 'rgba(255, 255, 255, 0.1)',
-                    accent: 'rgba(14, 165, 233, 0.15)',
-                    subtle: 'rgba(255, 255, 255, 0.02)'
+                    primary: 'rgba(59, 130, 246, 0.1)',
+                    accent: 'rgba(59, 130, 246, 0.15)',
+                    subtle: 'rgba(59, 130, 246, 0.02)'
                 }
             },
             fontFamily: {
@@ -92,14 +92,14 @@ const config: Config = {
             },
             backgroundImage: {
                 'premium-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%)',
-                'hero-glow': 'radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.15), transparent 70%)',
+                'hero-glow': 'radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.15), transparent 70%)',
                 'noise': 'url("/noise.png")'
             },
             boxShadow: {
                 'premium': '0 20px 40px -10px rgba(0,0,0,0.5)',
                 'premium-hover': '0 30px 60px -15px rgba(0,0,0,0.7)',
-                'glow': '0 0 20px rgba(14, 165, 233, 0.15)',
-                'glow-strong': '0 0 40px rgba(14, 165, 233, 0.3)'
+                'glow': '0 0 20px rgba(59, 130, 246, 0.15)',
+                'glow-strong': '0 0 40px rgba(59, 130, 246, 0.3)'
             },
             borderRadius: {
                 'xl': '1rem',

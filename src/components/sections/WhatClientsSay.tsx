@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
-import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 
 /* ─────────────────────────────────────────
    FADE-UP HELPER
@@ -23,113 +23,85 @@ function FadeUp({ children, delay = 0, className = "" }: { children: React.React
     );
 }
 
-const TESTIMONIALS = [
+const PRINCIPLES = [
     {
-        id: 1,
-        quote: "[Client testimonial goes here]",
-        name: "[Client Name]",
-        role: "[Role • Company]",
+        num: "01",
+        title: "Transparency First",
+        desc: "Every project starts with clear scope, timeline, and pricing. No hidden costs, no scope surprises. You always know where your project stands.",
     },
     {
-        id: 2,
-        quote: "[Client testimonial goes here]",
-        name: "[Client Name]",
-        role: "[Role • Company]",
+        num: "02",
+        title: "Your Vision, Our Execution",
+        desc: "We listen before we build. Every decision is rooted in your business goals, not our assumptions. Regular check-ins ensure alignment at every stage.",
     },
     {
-        id: 3,
-        quote: "[Client testimonial goes here]",
-        name: "[Client Name]",
-        role: "[Role • Company]",
-    }
+        num: "03",
+        title: "Quality Over Speed",
+        desc: "We don't cut corners to meet deadlines. Every line of code is reviewed, every design is tested, and every product is built to last.",
+    },
+    {
+        num: "04",
+        title: "Long-Term Partnership",
+        desc: "We don't disappear after launch. Post-deployment support, performance monitoring, and iterative improvements are part of how we work.",
+    },
 ];
 
 export default function WhatClientsSay() {
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-    const handleNext = () => {
-        setCurrentIndex((prev) => (prev + 1) % TESTIMONIALS.length);
-    };
-
-    const handlePrev = () => {
-        setCurrentIndex((prev) => (prev === 0 ? TESTIMONIALS.length - 1 : prev - 1));
-    };
-
-    const current = TESTIMONIALS[currentIndex];
-
     return (
-        <section id="testimonials" className="relative bg-[#050505] py-24 md:py-32 overflow-hidden border-t border-white/5">
-            <div className="max-w-[1200px] mx-auto px-6 md:px-12 relative z-10">
+        <section id="testimonials" className="relative bg-[#050505] py-24 md:py-32 overflow-hidden border-t border-[#1A2028]">
+            <div className="max-w-[1400px] mx-auto px-6 md:px-12 relative z-10">
                 {/* ── SECTION HEADER ── */}
-                <FadeUp className="mb-16 md:mb-24 flex flex-col md:flex-row items-start md:items-end justify-between gap-8 border-b border-white/10 pb-8">
-                    <div>
-                        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-zinc-400 text-[10px] font-bold tracking-[0.3em] uppercase mb-6">
-                            <span className="w-1.5 h-1.5 rounded-full bg-yellow-500 inline-block" />
-                            What Clients Say
-                        </span>
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-medium tracking-[-0.03em] text-white leading-[1.05]">
-                            Real people. <span className="text-zinc-600">Real experiences.</span>
-                        </h2>
+                <FadeUp className="mb-16 md:mb-24">
+                    <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8 border-b border-[#1A2028] pb-8">
+                        <div>
+                            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#1A2028] bg-transparent text-[#858F9C] text-[10px] font-bold tracking-[0.3em] uppercase mb-6">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] inline-block" />
+                                How We Work
+                            </span>
+                            <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-medium tracking-[-0.03em] text-[#F2F4F7] leading-[1.05]">
+                                Built on principles, <span className="text-[#6B7280]">not promises.</span>
+                            </h2>
+                        </div>
+                        <p className="text-[#858F9C] text-sm leading-relaxed max-w-xs font-light">
+                            Our approach is designed around trust, clarity, and long-term value for every client we work with.
+                        </p>
                     </div>
                 </FadeUp>
 
-                {/* ── TESTIMONIAL CAROUSEL ── */}
-                <FadeUp delay={0.1}>
-                    <div className="relative border border-white/10 rounded-[2rem] bg-[#0A0A0A] p-8 md:p-16 lg:p-24 overflow-hidden shadow-2xl">
-                        {/* Background Quote Icon */}
-                        <Quote className="absolute top-8 right-8 md:top-16 md:right-16 w-24 h-24 md:w-48 md:h-48 text-white/[0.02] rotate-12" />
-
-                        <div className="min-h-[250px] md:min-h-[300px] flex flex-col relative z-10">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={currentIndex}
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                                    className="flex flex-col flex-1"
-                                >
-                                    <h3 className="text-2xl md:text-4xl lg:text-5xl font-display font-medium text-white leading-[1.3] md:leading-[1.4] tracking-tight mb-12 md:mb-16">
-                                        “{current.quote}”
-                                    </h3>
-                                    
-                                    <div className="mt-auto">
-                                        <div className="text-lg md:text-xl font-bold text-white mb-2">
-                                            {current.name}
+                {/* ── PRINCIPLES GRID ── */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    {PRINCIPLES.map((principle, i) => (
+                        <FadeUp key={principle.num} delay={i * 0.12} className="group">
+                            <div className="relative">
+                                {/* Hover glow */}
+                                <div 
+                                    className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-700 blur-[50px] pointer-events-none" 
+                                    style={{ backgroundColor: "#3B82F6" }} 
+                                />
+                                
+                                <div className="relative p-8 md:p-10 rounded-2xl border border-[#1A2028] bg-[#0A0D12] overflow-hidden transition-all duration-500 group-hover:border-[#3B82F6] group-hover:bg-[#0B1626] h-full">
+                                    {/* Number & Arrow */}
+                                    <div className="flex justify-between items-start mb-8">
+                                        <div className="text-4xl md:text-5xl font-display font-bold text-[#1A2028] transition-colors duration-500 group-hover:text-[#3B82F6]/40">
+                                            {principle.num}
                                         </div>
-                                        <div className="text-sm md:text-base text-zinc-500 tracking-wide font-light">
-                                            {current.role}
+                                        <div className="w-10 h-10 rounded-full border border-[#1A2028] flex items-center justify-center bg-transparent transition-all duration-500 group-hover:border-[#3B82F6] group-hover:bg-[#3B82F6]/10">
+                                            <ArrowUpRight className="w-4 h-4 text-[#858F9C] group-hover:text-[#60A5FA] transition-all duration-500" />
                                         </div>
                                     </div>
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-                    </div>
-
-                    {/* ── NAVIGATION ── */}
-                    <div className="flex items-center justify-between mt-8 px-4 md:px-8">
-                        <div className="text-xs font-bold tracking-[0.3em] text-zinc-500 uppercase">
-                            0{currentIndex + 1} / 0{TESTIMONIALS.length}
-                        </div>
-                        <div className="flex items-center gap-4 md:gap-8">
-                            <button 
-                                onClick={handlePrev}
-                                className="group flex items-center gap-3 text-xs font-bold tracking-[0.2em] text-white uppercase hover:text-zinc-400 transition-colors"
-                            >
-                                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                                <span className="hidden md:inline">Previous</span>
-                            </button>
-                            <span className="w-px h-4 bg-white/10" />
-                            <button 
-                                onClick={handleNext}
-                                className="group flex items-center gap-3 text-xs font-bold tracking-[0.2em] text-white uppercase hover:text-zinc-400 transition-colors"
-                            >
-                                <span className="hidden md:inline">Next</span>
-                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                            </button>
-                        </div>
-                    </div>
-                </FadeUp>
+                                    
+                                    {/* Content */}
+                                    <h3 className="text-xl md:text-2xl font-display font-semibold text-[#F2F4F7] tracking-[-0.01em] mb-3 transition-colors duration-500 group-hover:text-white">
+                                        {principle.title}
+                                    </h3>
+                                    <p className="text-[#858F9C] text-sm md:text-base leading-relaxed font-light transition-colors duration-500 group-hover:text-[#9CA3AF]">
+                                        {principle.desc}
+                                    </p>
+                                </div>
+                            </div>
+                        </FadeUp>
+                    ))}
+                </div>
             </div>
         </section>
     );
